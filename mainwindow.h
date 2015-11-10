@@ -22,15 +22,16 @@ public slots:
 private:
 
     void createToolBar();
-    void majorScale(int key);
-    void majorPent(int key);
-    void minorScale(int key);
-    void minorPent(int key);
+    void majorDiatonic(int key);
+    void majorPentatonic(int key);
+    void minorDiatonic(int key);
+    void minorPentatonic(int key);
+    void writeScale();
 
-    enum {MAJORDIAT, MAJORPENT, MINORDIAT, MINORPENT};
+    enum {MAJOR_DIATONIC, MAJOR_PENTATONIC, MINOR_DIATONIC, MINOR_PENTATONIC};
 
-    QVector<int> *scaleDegrees;
-    QString *notes;
+    QVector<int> scaleDegrees;
+    const static QString notes[];
 
     QToolBar *selectionToolBar;
 

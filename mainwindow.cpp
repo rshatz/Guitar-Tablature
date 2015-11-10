@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     createToolBar();
 }
 
+const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
+                                     "D#", "E", "F", "F#", "G", "G#"};
+
 MainWindow::~MainWindow()
 {
 
@@ -19,8 +22,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::createToolBar()
 {
-    notes = new QString[12];
-
     selectionToolBar = addToolBar("Selection Tool Bar");
 
     keyComboBox = new QComboBox;
@@ -80,54 +81,83 @@ void MainWindow::scaleChanged()
 {
     switch(scaleComboBox->currentIndex())
     {
-    case MAJORDIAT:
-        majorScale(keyComboBox->currentIndex());
+    case MAJOR_DIATONIC:
+        majorDiatonic(keyComboBox->currentIndex());
         break;
-    case MAJORPENT:
-        majorScale(keyComboBox->currentIndex());
+    case MAJOR_PENTATONIC:
+        majorPentatonic(keyComboBox->currentIndex());
         break;
-    case MINORDIAT:
-        minorScale(keyComboBox->currentIndex());
+    case MINOR_DIATONIC:
+        minorDiatonic(keyComboBox->currentIndex());
         break;
-    case MINORPENT:
-        minorScale(keyComboBox->currentIndex());
+    case MINOR_PENTATONIC:
+        minorPentatonic(keyComboBox->currentIndex());
         break;
     }
+
+    writeScale();
 }
 
-void MainWindow::majorScale(int key)
+void MainWindow::majorDiatonic(int key)
 {
-    const int major[] = {2, 2, 1, 2, 2, 2, 1};
+    scaleDegrees.clear();
+    const int majorDiat[] = {2, 2, 1, 2, 2, 2, 1};
     const int SIZE = 7;
-    scaleDegrees = new QVector<int>(SIZE);
 
     int position = key;
     for(int i = 0; i < SIZE; i++)
     {
-        int num = position % 12;
-        scaleDegrees->append(num);
-        position += major[i];
+        scaleDegrees.append(position % 12);
+        position += majorDiat[i];
     }
-    qDebug() << "hello";
 }
 
-void MainWindow::majorPent(int key)
+void MainWindow::majorPentatonic(int key)
 {
+    scaleDegrees.clear();
+    const int majorPent[] = {2, 2, 3, 2, 3};
+    const int SIZE = 5;
 
+    int position = key;
+    for(int i = 0; i < SIZE; i++)
+    {
+        scaleDegrees.append(position % 12);
+        position += majorPent[i];
+    }
 }
 
-void MainWindow::minorScale(int key)
+void MainWindow::minorDiatonic(int key)
 {
-    const int minor[] = {2, 1, 2, 2, 1, 2, 2};
-    int postion = key;
+    scaleDegrees.clear();
+    const int minorDiat[] = {2, 1, 2, 2, 1, 2, 2};
+    const int SIZE = 7;
+
+    int position = key;
+    for(int i = 0; i < SIZE; i++)
+    {
+        scaleDegrees.append(position % 12);
+        position += minorDiat[i];
+    }
 }
 
-void MainWindow::minorPent(int key)
+void MainWindow::minorPentatonic(int key)
 {
+    scaleDegrees.clear();
+    const int minorPent[] = {3, 2, 2, 3, 2};
+    const int SIZE = 5;
 
+    int position = key;
+    for(int i = 0; i < SIZE; i++)
+    {
+        scaleDegrees.append(position % 12);
+        position += minorPent[i];
+    }
 }
 
-
-
-
-
+void MainWindow::writeScale()
+{
+    for(int i = 0; i < scaleDegrees.size(); i++)
+    {
+        qDebug() << notes[scaleDegrees[i]];
+    }
+}
