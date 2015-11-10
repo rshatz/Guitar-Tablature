@@ -1,4 +1,5 @@
 #include <QDebug>
+
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -107,6 +108,7 @@ void MainWindow::majorScale(int key)
         scaleDegrees->append(num);
         position += major[i];
     }
+    qDebug() << "hello";
 }
 
 void MainWindow::majorPent(int key)
