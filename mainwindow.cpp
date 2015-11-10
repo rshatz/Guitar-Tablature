@@ -51,8 +51,17 @@ void MainWindow::createToolBar()
 
     scaleComboBox->addItem("major");
     scaleComboBox->addItem("major pentatonic");
-    scaleComboBox->addItem("minor");
+    scaleComboBox->addItem("natural minor");
     scaleComboBox->addItem("minor pentatonic");
+    scaleComboBox->addItem("harmonic minor");
+    scaleComboBox->addItem("melodic minor");
+    scaleComboBox->insertSeparator(6);
+    scaleComboBox->addItem("blues");
+    scaleComboBox->addItem("whole tone");
+    scaleComboBox->addItem("whole-half diminished ");
+    scaleComboBox->addItem("half-whole diminished ");
+    scaleComboBox->insertSeparator(11);
+
 
     tuningComboBox = new QComboBox;
     tuningComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -64,6 +73,8 @@ void MainWindow::createToolBar()
     tuningComboBox->addItem("D#");
     tuningComboBox->addItem("Drop D");
 
+    submitButton = new QPushButton("Submit");
+
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
     selectionToolBar->addSeparator();
@@ -72,92 +83,181 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(tuningLabel);
     selectionToolBar->addWidget(tuningComboBox);
+    selectionToolBar->addSeparator();
+    selectionToolBar->addWidget(submitButton);
 
-    connect(keyComboBox, SIGNAL(activated(int)), this, SLOT(scaleChanged()));
-    connect(scaleComboBox, SIGNAL(activated(int)), this, SLOT(scaleChanged()));
+    connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(writeScale()));
+}
+
+void MainWindow::writeScale()
+{
+    scaleDegrees.clear();
+    scaleChanged();
+    for(int i = 0; i < scaleDegrees.size(); i++)
+    {
+        qDebug() << notes[scaleDegrees[i]];
+    }
+
+    qDebug() << "";
+    qDebug() << "";
 }
 
 void MainWindow::scaleChanged()
 {
     switch(scaleComboBox->currentIndex())
     {
-    case MAJOR_DIATONIC:
-        majorDiatonic(keyComboBox->currentIndex());
+    case MAJOR:
+        major();
         break;
     case MAJOR_PENTATONIC:
-        majorPentatonic(keyComboBox->currentIndex());
+        majorPentatonic();
         break;
-    case MINOR_DIATONIC:
-        minorDiatonic(keyComboBox->currentIndex());
+    case NATURAL_MINOR:
+        naturalMinor();
         break;
     case MINOR_PENTATONIC:
-        minorPentatonic(keyComboBox->currentIndex());
+        minorPentatonic();
+        break;
+    case HARMONIC_MINOR:
+        harmonicMinor();
+        break;
+    case MELODIC_MINOR:
+        melodicMinor();
+        break;
+    case BLUES:
+        blues();
+        break;
+    case WHOLE_TONE:
+        wholeTone();
+        break;
+    case WHOLE_HALF_DIM:
+        wholeHalfDim();
+        break;
+    case HALF_WHOLE_DIM:
+        halfWholeDim();
+        break;
+    case PHRYGIAN:
+        phrygian();
+        break;
+    case LYDIAN:
+        lydian();
+        break;
+    case MIXOLYDIAN:
+        mixolydian();
+        break;
+    case AEOLIAN:
+        aeolian();
+        break;
+    case LOCRIAN:
+        locraian();
         break;
     }
-
-    writeScale();
 }
 
-void MainWindow::majorDiatonic(int key)
+void MainWindow::major()
 {
-    scaleDegrees.clear();
-    const int majorDiat[] = {2, 2, 1, 2, 2, 2, 1};
+    const int formula[] = {2, 2, 1, 2, 2, 2, 1};
     const int SIZE = 7;
-
-    int position = key;
-    for(int i = 0; i < SIZE; i++)
-    {
-        scaleDegrees.append(position % 12);
-        position += majorDiat[i];
-    }
+    buildScale(formula, SIZE);
 }
 
-void MainWindow::majorPentatonic(int key)
+void MainWindow::majorPentatonic()
 {
-    scaleDegrees.clear();
-    const int majorPent[] = {2, 2, 3, 2, 3};
+    const int formula[] = {2, 2, 3, 2, 3};
     const int SIZE = 5;
-
-    int position = key;
-    for(int i = 0; i < SIZE; i++)
-    {
-        scaleDegrees.append(position % 12);
-        position += majorPent[i];
-    }
+    buildScale(formula, SIZE);
 }
 
-void MainWindow::minorDiatonic(int key)
+void MainWindow::naturalMinor()
 {
-    scaleDegrees.clear();
-    const int minorDiat[] = {2, 1, 2, 2, 1, 2, 2};
+    const int formula[] = {2, 1, 2, 2, 1, 2, 2};
     const int SIZE = 7;
-
-    int position = key;
-    for(int i = 0; i < SIZE; i++)
-    {
-        scaleDegrees.append(position % 12);
-        position += minorDiat[i];
-    }
+    buildScale(formula, SIZE);
 }
 
-void MainWindow::minorPentatonic(int key)
+void MainWindow::minorPentatonic()
 {
-    scaleDegrees.clear();
-    const int minorPent[] = {3, 2, 2, 3, 2};
+    const int formula[] = {3, 2, 2, 3, 2};
     const int SIZE = 5;
+    buildScale(formula, SIZE);
+}
 
-    int position = key;
-    for(int i = 0; i < SIZE; i++)
+void MainWindow::harmonicMinor()
+{
+    const int formula[] = {2, 1, 2, 2, 1, 3, 2};
+    const int SIZE = 7;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::melodicMinor()
+{
+    const int formula[] = {2, 1, 2, 2, 2, 2, 1};
+    const int SIZE = 7;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::blues()
+{
+    const int formula[] = {3, 2, 1, 1, 3, 2};
+    const int SIZE = 6;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::wholeTone()
+{
+    const int formula[] = {2, 2, 2, 2, 2, 2};
+    const int SIZE = 6;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::wholeHalfDim()
+{
+    const int formula[] = {2, 1, 2, 1, 2, 1, 2, 1};
+    const int SIZE = 8;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::halfWholeDim()
+{
+    const int formula[] = {1, 2, 1, 2, 1, 2, 1, 2};
+    const int SIZE = 8;
+    buildScale(formula, SIZE);
+}
+
+void MainWindow::phrygian()
+{
+
+}
+
+void MainWindow::lydian()
+{
+
+}
+
+void MainWindow::mixolydian()
+{
+
+}
+
+void MainWindow::aeolian()
+{
+
+}
+
+void MainWindow::locraian()
+{
+
+}
+
+void MainWindow::buildScale(const int scaleFormula[], const int size)
+{
+    int position = keyComboBox->currentIndex();
+    for(int i = 0; i < size; i++)
     {
         scaleDegrees.append(position % 12);
-        position += minorPent[i];
+        position += scaleFormula[i];
     }
 }
 
-void MainWindow::writeScale()
-{
-    for(int i = 0; i < scaleDegrees.size(); i++)
-    {
-        qDebug() << notes[scaleDegrees[i]];
-    }
-}
+
+

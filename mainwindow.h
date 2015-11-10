@@ -4,8 +4,7 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include <QLabel>
-
-#include <string>
+#include <QPushButton>
 
 class MainWindow : public QMainWindow
 {
@@ -17,18 +16,33 @@ public:
 
 public slots:
 
-    void scaleChanged();
+    void writeScale();
 
 private:
 
     void createToolBar();
-    void majorDiatonic(int key);
-    void majorPentatonic(int key);
-    void minorDiatonic(int key);
-    void minorPentatonic(int key);
-    void writeScale();
+    void scaleChanged();
+    void major();
+    void majorPentatonic();
+    void naturalMinor();
+    void minorPentatonic();
+    void harmonicMinor();
+    void melodicMinor();
+    void blues();
+    void wholeTone();
+    void wholeHalfDim();
+    void halfWholeDim();
+    void phrygian();
+    void lydian();
+    void mixolydian();
+    void aeolian();
+    void locraian();
+    void buildScale(const int scaleFormula[], const int size);
 
-    enum {MAJOR_DIATONIC, MAJOR_PENTATONIC, MINOR_DIATONIC, MINOR_PENTATONIC};
+    enum {MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
+         HARMONIC_MINOR, MELODIC_MINOR, BLUES, WHOLE_TONE,
+         WHOLE_HALF_DIM, HALF_WHOLE_DIM, PHRYGIAN, LYDIAN,
+         MIXOLYDIAN, AEOLIAN, LOCRIAN};
 
     QVector<int> scaleDegrees;
     const static QString notes[];
@@ -38,6 +52,8 @@ private:
     QComboBox *keyComboBox;
     QComboBox *scaleComboBox;
     QComboBox *tuningComboBox;
+
+    QPushButton *submitButton;
 
     QLabel *keyLabel;
     QLabel *scaleLabel;
