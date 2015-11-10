@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -7,9 +8,25 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    keyComboBox = new QComboBox;
+    createToolBar();
+}
 
+MainWindow::~MainWindow()
+{
+
+}
+
+void MainWindow::createToolBar()
+{
+    notes = new QString[12];
+
+    selectionToolBar = addToolBar("Selection Tool Bar");
+
+    keyComboBox = new QComboBox;
     keyComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+    keyLabel = new QLabel("   &Key ");
+    keyLabel->setBuddy(keyComboBox);
 
     keyComboBox->addItem("A");
     keyComboBox->addItem("A#");
@@ -27,53 +44,88 @@ MainWindow::MainWindow(QWidget *parent)
     scaleComboBox = new QComboBox;
     scaleComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
+    scaleLabel = new QLabel("   S&cale ");
+    scaleLabel->setBuddy(scaleComboBox);
+
     scaleComboBox->addItem("major");
     scaleComboBox->addItem("major pentatonic");
     scaleComboBox->addItem("minor");
     scaleComboBox->addItem("minor pentatonic");
 
     tuningComboBox = new QComboBox;
+    tuningComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+    tuningLabel = new QLabel("   &Tuning ");
+    tuningLabel->setBuddy(tuningComboBox);
 
     tuningComboBox->addItem("standard");
     tuningComboBox->addItem("D#");
     tuningComboBox->addItem("Drop D");
 
-    QGridLayout *rightSideLayout = new QGridLayout;
+    selectionToolBar->addWidget(keyLabel);
+    selectionToolBar->addWidget(keyComboBox);
+    selectionToolBar->addSeparator();
+    selectionToolBar->addWidget(scaleLabel);
+    selectionToolBar->addWidget(scaleComboBox);
+    selectionToolBar->addSeparator();
+    selectionToolBar->addWidget(tuningLabel);
+    selectionToolBar->addWidget(tuningComboBox);
 
-    keyLabel = new QLabel("&key");
-    keyLabel->setBuddy(keyComboBox);
-
-    scaleLabel = new QLabel("&scale");
-    scaleLabel->setBuddy(scaleComboBox);
-
-    tuningLabel = new QLabel("&tuning");
-    tuningLabel->setBuddy(tuningComboBox);
-
-    rightSideLayout->addWidget(keyLabel, 0, 0, Qt::AlignRight);
-    rightSideLayout->addWidget(keyComboBox, 0, 1);
-    rightSideLayout->addWidget(scaleLabel, 1, 0, Qt::AlignRight);
-    rightSideLayout->addWidget(scaleComboBox, 1, 1);
-    rightSideLayout->addWidget(tuningLabel, 2, 0, Qt::AlignRight);
-    rightSideLayout->addWidget(tuningComboBox);
-
-    tabSheet = new QPlainTextEdit;
-
-    QVBoxLayout *leftSideLayout = new QVBoxLayout;
-
-    leftSideLayout->addWidget(tabSheet);
-
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-
-    mainLayout->addLayout(leftSideLayout);
-    mainLayout->addLayout(rightSideLayout);
-
-    QWidget *window = new QWidget(this);
-
-    window->setLayout(mainLayout);
-    setCentralWidget(window);
+    connect(keyComboBox, SIGNAL(activated(int)), this, SLOT(scaleChanged()));
+    connect(scaleComboBox, SIGNAL(activated(int)), this, SLOT(scaleChanged()));
 }
 
-MainWindow::~MainWindow()
+void MainWindow::scaleChanged()
+{
+    switch(scaleComboBox->currentIndex())
+    {
+    case MAJORDIAT:
+        majorScale(keyComboBox->currentIndex());
+        break;
+    case MAJORPENT:
+        majorScale(keyComboBox->currentIndex());
+        break;
+    case MINORDIAT:
+        minorScale(keyComboBox->currentIndex());
+        break;
+    case MINORPENT:
+        minorScale(keyComboBox->currentIndex());
+        break;
+    }
+}
+
+void MainWindow::majorScale(int key)
+{
+    const int major[] = {2, 2, 1, 2, 2, 2, 1};
+    const int SIZE = 7;
+    scaleDegrees = new QVector<int>(SIZE);
+
+    int position = key;
+    for(int i = 0; i < SIZE; i++)
+    {
+        int num = position % 12;
+        scaleDegrees->append(num);
+        position += major[i];
+    }
+}
+
+void MainWindow::majorPent(int key)
 {
 
 }
+
+void MainWindow::minorScale(int key)
+{
+    const int minor[] = {2, 1, 2, 2, 1, 2, 2};
+    int postion = key;
+}
+
+void MainWindow::minorPent(int key)
+{
+
+}
+
+
+
+
+

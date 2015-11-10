@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QComboBox>
 #include <QLabel>
-#include <QPlainTextEdit>
 
+#include <string>
 
 class MainWindow : public QMainWindow
 {
@@ -15,9 +15,24 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+
+    void scaleChanged();
+
 private:
 
-    QPlainTextEdit *tabSheet;
+    void createToolBar();
+    void majorScale(int key);
+    void majorPent(int key);
+    void minorScale(int key);
+    void minorPent(int key);
+
+    enum {MAJORDIAT, MAJORPENT, MINORDIAT, MINORPENT};
+
+    QVector<int> *scaleDegrees;
+    QString *notes;
+
+    QToolBar *selectionToolBar;
 
     QComboBox *keyComboBox;
     QComboBox *scaleComboBox;
