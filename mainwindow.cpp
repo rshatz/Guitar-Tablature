@@ -1,15 +1,17 @@
 #include <QDebug>
 
 #include <QToolBar>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QDockWidget>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    //tabSheet = new QPlainTextEdit;
+    //setCentralWidget(tabSheet);
     createToolBar();
+    createDockWindow();
 }
 
 const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
@@ -30,18 +32,10 @@ void MainWindow::createToolBar()
     keyLabel = new QLabel("   &Key ");
     keyLabel->setBuddy(keyComboBox);
 
-    keyComboBox->addItem("A");
-    keyComboBox->addItem("A#");
-    keyComboBox->addItem("B");
-    keyComboBox->addItem("C");
-    keyComboBox->addItem("C#");
-    keyComboBox->addItem("D");
-    keyComboBox->addItem("D#");
-    keyComboBox->addItem("E");
-    keyComboBox->addItem("F");
-    keyComboBox->addItem("F#");
-    keyComboBox->addItem("G");
-    keyComboBox->addItem("G#");
+    for(int i = 0; i < 11; i++)
+    {
+        keyComboBox->addItem(notes[i]);
+    }
 
     scaleComboBox = new QComboBox;
     scaleComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -61,6 +55,7 @@ void MainWindow::createToolBar()
     scaleComboBox->addItem("whole-half diminished ");
     scaleComboBox->addItem("half-whole diminished ");
     scaleComboBox->insertSeparator(11);
+    scaleComboBox->addItem("All Notes");
 
 
     tuningComboBox = new QComboBox;
@@ -87,6 +82,24 @@ void MainWindow::createToolBar()
     selectionToolBar->addWidget(submitButton);
 
     connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(writeScale()));
+}
+
+void MainWindow::createDockWindow()
+{   
+    fretBoardLabel = new QLabel;
+    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+
+    fretBoardDock = new QDockWidget("fretbord");
+    fretBoardDock->setObjectName("fretBoardDock");
+    fretBoardDock->setWidget(fretBoardLabel);
+    fretBoardDock->setFixedSize(900, 300);
+    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
+                                   Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
+
+    noteLabel = new QLabel(fretBoardDock);
+    noteLabel->setPixmap(QPixmap(":/noteDot.png"));
+    noteLabel->setGeometry(190, 200, 100, 100);
 }
 
 void MainWindow::writeScale()
@@ -258,6 +271,3 @@ void MainWindow::buildScale(const int scaleFormula[], const int size)
         position += scaleFormula[i];
     }
 }
-
-
-

@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QPlainTextEdit>
 
 class MainWindow : public QMainWindow
 {
@@ -21,6 +22,7 @@ public slots:
 private:
 
     void createToolBar();
+    void createDockWindow();
     void scaleChanged();
     void major();
     void majorPentatonic();
@@ -55,6 +57,11 @@ private:
 
     QPushButton *submitButton;
 
+    QDockWidget *fretBoardDock;
+    //QPlainTextEdit *tabSheet;
+
+    QLabel *noteLabel;
+    QLabel *fretBoardLabel;
     QLabel *keyLabel;
     QLabel *scaleLabel;
     QLabel *tuningLabel;

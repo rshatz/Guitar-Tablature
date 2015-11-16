@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>FretBoard.jpg</file>
+        <file>noteDot.png</file>
+    </qresource>
+</RCC>
