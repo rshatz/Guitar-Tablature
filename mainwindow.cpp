@@ -2,6 +2,7 @@
 
 #include <QToolBar>
 #include <QDockWidget>
+#include <QVBoxLayout>
 
 #include "mainwindow.h"
 
@@ -11,7 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
     //tabSheet = new QPlainTextEdit;
     //setCentralWidget(tabSheet);
     createToolBar();
-    createDockWindow();
+    //createDockWindow();
+
+    fretBoardLabel = new QLabel(this);
+    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+
+    QVBoxLayout *fretBoardLayout = new QVBoxLayout;
+    fretBoardLayout->addWidget(fretBoardLabel);
+
+    QWidget *mainLayout = new QWidget;
+    mainLayout->setLayout(fretBoardLayout);
+
+    setCentralWidget(mainLayout);
 }
 
 const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
@@ -64,8 +76,7 @@ void MainWindow::createToolBar()
     tuningLabel = new QLabel("   &Tuning ");
     tuningLabel->setBuddy(tuningComboBox);
 
-    tuningComboBox->addItem("standard");
-    tuningComboBox->addItem("D#");
+    tuningComboBox->addItem("Standard");
     tuningComboBox->addItem("Drop D");
 
     submitButton = new QPushButton("Submit");
@@ -81,41 +92,47 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(submitButton);
 
-    connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(writeScale()));
+    connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));
 }
 
-void MainWindow::createDockWindow()
-{   
-    fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+//void MainWindow::createDockWindow()
+//{
+//    fretBoardLabel = new QLabel;
+//    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+//    int h = fretBoardLabel->height();
+//    int w = this->width();
 
-    fretBoardDock = new QDockWidget("fretbord");
-    fretBoardDock->setObjectName("fretBoardDock");
-    fretBoardDock->setWidget(fretBoardLabel);
-    fretBoardDock->setFixedSize(900, 300);
-    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
-                                   Qt::BottomDockWidgetArea);
-    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
+//    qDebug() << h;
+//    qDebug() << w;
+//    fretBoardDock = new QDockWidget("fretbord");
+//    fretBoardDock->setObjectName("fretBoardDock");
+//    fretBoardDock->setWidget(fretBoardLabel);
+//    //fretBoardDock->setFixedHeight(fretBoardLabel->minimumHeight());
+//    //fretBoardDock->setFixedWidth(fretBoardLabel->minimumWidth());
+//    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
+//                                   Qt::BottomDockWidgetArea);
+//    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
 
-    noteLabel = new QLabel(fretBoardDock);
-    noteLabel->setPixmap(QPixmap(":/noteDot.png"));
-    noteLabel->setGeometry(190, 200, 100, 100);
-}
+//    //noteLabel = new QLabel(fretBoardDock);
+//    //noteLabel->setPixmap(QPixmap(":/noteDot.png"));
+//    //noteLabel->setGeometry(190, 200, w, h);
+//}
 
-void MainWindow::writeScale()
+void MainWindow::submitPressed()
 {
     scaleDegrees.clear();
-    scaleChanged();
+    changeScale();
+    drawScale();
     for(int i = 0; i < scaleDegrees.size(); i++)
     {
-        qDebug() << notes[scaleDegrees[i]];
+        //qDebug() << notes[scaleDegrees[i]];
     }
 
-    qDebug() << "";
-    qDebug() << "";
+    //qDebug() << "";
+    //qDebug() << "";
 }
 
-void MainWindow::scaleChanged()
+void MainWindow::changeScale()
 {
     switch(scaleComboBox->currentIndex())
     {
@@ -163,6 +180,19 @@ void MainWindow::scaleChanged()
         break;
     case LOCRIAN:
         locraian();
+        break;
+    }
+}
+
+void MainWindow::setTuning()
+{
+    switch(tuningComboBox->currentIndex())
+    {
+    case STANDARD:
+        tuningPositions = new int[6]{7, 2, 10, 5, 0, 7};
+        break;
+    case DROP_D:
+        tuningPositions = new int[6]{7, 2, 10, 5, 0, 5};
         break;
     }
 }
@@ -270,4 +300,69 @@ void MainWindow::buildScale(const int scaleFormula[], const int size)
         scaleDegrees.append(position % 12);
         position += scaleFormula[i];
     }
+}
+
+void MainWindow::drawScale()
+{
+    noteLabel = new QLabel *[6];
+
+    int x = 65;
+    int y = 0;
+
+    setTuning();
+    QVectorIterator<int> i(scaleDegrees);
+    for(int string = 0; string < 6; string++)
+    {
+        int notePos = tuningPositions[string];
+        noteLabel[string] = new QLabel[12];
+        for(int fret = 0; fret < 12; fret++)
+        {
+            if(notePos >= 12)
+            {
+                notePos = 0;
+            }
+            noteLabel[string][fret].setParent(fretBoardLabel);
+            noteLabel[string][fret].setText(notes[notePos]);
+            noteLabel[string][fret].setGeometry(x, y, 32, 32);
+            //noteLabel[string][fret].show();
+            QString sfNote = noteLabel[string][fret].text();
+            //qDebug() << sfNote;
+            while(i.hasNext())
+            {
+                QString sdNote = notes[i.next()];
+                if(sfNote == sdNote)
+                {
+                    noteLabel[string][fret].show();
+                }
+            }
+            i.toFront();
+            x += 95;//increment pixel length to next fret
+            notePos++;
+        }
+        x = 65;
+        y += 40;//increment pixel length to next string
+    }
+
+//    QVectorIterator<int> i(scaleDegrees);
+//    for(int string = 0; string < 6; string++)
+//    {
+//        for(int fret = 0; fret < 12; fret++)
+//        {
+//            int notePos = 0;
+//            while(i.hasNext())
+//            {
+//                if(notePos >= 12)
+//                {
+//                    notePos = 0;
+//                }
+//                QString sdNote = notes[i.next()];
+//                QString sfNote = noteLabel[string][fret].text();
+//                if(sfNote == sdNote)
+//                {
+//                    noteLabel[string][fret].show();
+//                }
+//            }
+//            notePos++;
+//        }
+//    }
 }

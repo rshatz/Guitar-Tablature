@@ -17,13 +17,14 @@ public:
 
 public slots:
 
-    void writeScale();
+    void submitPressed();
 
 private:
 
     void createToolBar();
     void createDockWindow();
-    void scaleChanged();
+    void changeScale();
+    void setTuning();
     void major();
     void majorPentatonic();
     void naturalMinor();
@@ -40,13 +41,17 @@ private:
     void aeolian();
     void locraian();
     void buildScale(const int scaleFormula[], const int size);
+    void drawScale();
 
-    enum {MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
+    enum { MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
          HARMONIC_MINOR, MELODIC_MINOR, BLUES, WHOLE_TONE,
          WHOLE_HALF_DIM, HALF_WHOLE_DIM, PHRYGIAN, LYDIAN,
-         MIXOLYDIAN, AEOLIAN, LOCRIAN};
+         MIXOLYDIAN, AEOLIAN, LOCRIAN };
+
+    enum { STANDARD, DROP_D };
 
     QVector<int> scaleDegrees;
+    int *tuningPositions;
     const static QString notes[];
 
     QToolBar *selectionToolBar;
@@ -58,9 +63,9 @@ private:
     QPushButton *submitButton;
 
     QDockWidget *fretBoardDock;
-    //QPlainTextEdit *tabSheet;
+    QPlainTextEdit *tabSheet;
 
-    QLabel *noteLabel;
+    QLabel **noteLabel;
     QLabel *fretBoardLabel;
     QLabel *keyLabel;
     QLabel *scaleLabel;
