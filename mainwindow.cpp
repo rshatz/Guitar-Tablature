@@ -2,13 +2,23 @@
 
 #include <QToolBar>
 #include <QDockWidget>
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    noteLabel = new QLabel *[6];
+
+    for(int i = 0; i < 6; i++)
+    {
+        noteLabel[i] = new QLabel[13];
+        for(int u = 0; u < 13; u++)
+        {
+            noteLabel[i][u].setText("");
+        }
+    }
     //tabSheet = new QPlainTextEdit;
     //setCentralWidget(tabSheet);
     createToolBar();
@@ -17,11 +27,16 @@ MainWindow::MainWindow(QWidget *parent)
     fretBoardLabel = new QLabel(this);
     fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
 
-    QVBoxLayout *fretBoardLayout = new QVBoxLayout;
-    fretBoardLayout->addWidget(fretBoardLabel);
+    //fretBoardLabel->setStyleSheet("QLabel{margin: 0 0 0 50px;}");
+    notesDisplayLabel = new QLabel(this);
+
+    topLayout = new QHBoxLayout;
+    topLayout->setContentsMargins(50, 50, 0, 50);
+    topLayout->addWidget(fretBoardLabel);
+    topLayout->addWidget(notesDisplayLabel);
 
     QWidget *mainLayout = new QWidget;
-    mainLayout->setLayout(fretBoardLayout);
+    mainLayout->setLayout(topLayout);
 
     setCentralWidget(mainLayout);
 }
@@ -78,6 +93,12 @@ void MainWindow::createToolBar()
 
     tuningComboBox->addItem("Standard");
     tuningComboBox->addItem("Drop D");
+    //tuningComboBox->insertSeparator(2);
+    tuningComboBox->addItem("Open A");
+    tuningComboBox->addItem("Open C");
+    tuningComboBox->addItem("Open D");
+    tuningComboBox->addItem("Open D Minor");
+    tuningComboBox->addItem("Open G");
 
     submitButton = new QPushButton("Submit");
 
@@ -120,16 +141,22 @@ void MainWindow::createToolBar()
 
 void MainWindow::submitPressed()
 {
+    for(int i = 0; i < 6; ++i) {
+        delete [] noteLabel[i];
+    }
+    delete [] noteLabel;
     scaleDegrees.clear();
     changeScale();
+    setTuning();
     drawScale();
+
+    QString noteList;
     for(int i = 0; i < scaleDegrees.size(); i++)
     {
-        //qDebug() << notes[scaleDegrees[i]];
+        noteList += notes[scaleDegrees[i]];
+        noteList += " ";
     }
-
-    //qDebug() << "";
-    //qDebug() << "";
+    notesDisplayLabel->setText(noteList);
 }
 
 void MainWindow::changeScale()
@@ -194,6 +221,11 @@ void MainWindow::setTuning()
     case DROP_D:
         tuningPositions = new int[6]{7, 2, 10, 5, 0, 5};
         break;
+    case OPEN_A:
+        tuningPositions = new int[6]{7, 0, 7, 4, 0, 7};
+        break;
+    case OPEN_C:
+        tuningPositions = new int[6]{7, 3, 10, 3, 10, 3 };
     }
 }
 
@@ -304,33 +336,40 @@ void MainWindow::buildScale(const int scaleFormula[], const int size)
 
 void MainWindow::drawScale()
 {
+    int x = 30;//65
+    int y = 75;//0
+
     noteLabel = new QLabel *[6];
 
-    int x = 65;
-    int y = 0;
+    for(int i = 0; i < 6; i++)
+    {
+        noteLabel[i] = new QLabel[13];
+        for(int u = 0; u < 13; u++)
+        {
+            noteLabel[i][u].setText("");
+        }
+    }
 
-    setTuning();
     QVectorIterator<int> i(scaleDegrees);
     for(int string = 0; string < 6; string++)
     {
         int notePos = tuningPositions[string];
-        noteLabel[string] = new QLabel[12];
-        for(int fret = 0; fret < 12; fret++)
+        //noteLabel[string] = new QLabel[13];
+
+        for(int fret = 0; fret < 13; fret++)
         {
             if(notePos >= 12)
             {
                 notePos = 0;
             }
-            noteLabel[string][fret].setParent(fretBoardLabel);
+
+            noteLabel[string][fret].setParent(this/*fretBoardLabel*/);
             noteLabel[string][fret].setText(notes[notePos]);
             noteLabel[string][fret].setGeometry(x, y, 32, 32);
-            //noteLabel[string][fret].show();
-            QString sfNote = noteLabel[string][fret].text();
-            //qDebug() << sfNote;
+
             while(i.hasNext())
             {
-                QString sdNote = notes[i.next()];
-                if(sfNote == sdNote)
+                if(noteLabel[string][fret].text() == notes[i.next()])
                 {
                     noteLabel[string][fret].show();
                 }
@@ -339,30 +378,7 @@ void MainWindow::drawScale()
             x += 95;//increment pixel length to next fret
             notePos++;
         }
-        x = 65;
+        x = 30;
         y += 40;//increment pixel length to next string
     }
-
-//    QVectorIterator<int> i(scaleDegrees);
-//    for(int string = 0; string < 6; string++)
-//    {
-//        for(int fret = 0; fret < 12; fret++)
-//        {
-//            int notePos = 0;
-//            while(i.hasNext())
-//            {
-//                if(notePos >= 12)
-//                {
-//                    notePos = 0;
-//                }
-//                QString sdNote = notes[i.next()];
-//                QString sfNote = noteLabel[string][fret].text();
-//                if(sfNote == sdNote)
-//                {
-//                    noteLabel[string][fret].show();
-//                }
-//            }
-//            notePos++;
-//        }
-//    }
 }

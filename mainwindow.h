@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPlainTextEdit>
+#include <QHBoxLayout>
 
 class MainWindow : public QMainWindow
 {
@@ -48,7 +49,9 @@ private:
          WHOLE_HALF_DIM, HALF_WHOLE_DIM, PHRYGIAN, LYDIAN,
          MIXOLYDIAN, AEOLIAN, LOCRIAN };
 
-    enum { STANDARD, DROP_D };
+    enum { STANDARD, DROP_D, OPEN_A, OPEN_C, OPEN_D, OPEN_DM, OPEN_G };
+
+    QWidget *topWindowWidget;
 
     QVector<int> scaleDegrees;
     int *tuningPositions;
@@ -65,11 +68,13 @@ private:
     QDockWidget *fretBoardDock;
     QPlainTextEdit *tabSheet;
 
+    QHBoxLayout *topLayout;
     QLabel **noteLabel;
     QLabel *fretBoardLabel;
     QLabel *keyLabel;
     QLabel *scaleLabel;
     QLabel *tuningLabel;
+    QLabel *notesDisplayLabel;
 };
 
 #endif // MAINWINDOW_H
