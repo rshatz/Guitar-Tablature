@@ -6,7 +6,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPlainTextEdit>
-#include <QHBoxLayout>
 
 class MainWindow : public QMainWindow
 {
@@ -68,7 +67,6 @@ private:
     QDockWidget *fretBoardDock;
     QPlainTextEdit *tabSheet;
 
-    QHBoxLayout *topLayout;
     QLabel **noteLabel;
     QLabel *fretBoardLabel;
     QLabel *keyLabel;

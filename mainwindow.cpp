@@ -3,6 +3,7 @@
 #include <QToolBar>
 #include <QDockWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "mainwindow.h"
 
@@ -19,26 +20,34 @@ MainWindow::MainWindow(QWidget *parent)
             noteLabel[i][u].setText("");
         }
     }
-    //tabSheet = new QPlainTextEdit;
-    //setCentralWidget(tabSheet);
+
     createToolBar();
-    //createDockWindow();
 
     fretBoardLabel = new QLabel(this);
     fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
 
-    //fretBoardLabel->setStyleSheet("QLabel{margin: 0 0 0 50px;}");
     notesDisplayLabel = new QLabel(this);
 
-    topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(50, 50, 0, 50);
+    QHBoxLayout *topLayout = new QHBoxLayout;
+    topLayout->setContentsMargins(60, 15, 50, 0);
     topLayout->addWidget(fretBoardLabel);
     topLayout->addWidget(notesDisplayLabel);
+    topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    QWidget *mainLayout = new QWidget;
-    mainLayout->setLayout(topLayout);
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    tabSheet = new QPlainTextEdit;
+    bottomLayout->addWidget(tabSheet);
 
-    setCentralWidget(mainLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(topLayout);
+    mainLayout->addLayout(bottomLayout);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    QWidget *centralWidgetLayout = new QWidget;
+    centralWidgetLayout->setLayout(mainLayout);
+
+    setCentralWidget(centralWidgetLayout);
+
 }
 
 const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
@@ -116,28 +125,28 @@ void MainWindow::createToolBar()
     connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));
 }
 
-//void MainWindow::createDockWindow()
-//{
-//    fretBoardLabel = new QLabel;
-//    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
-//    int h = fretBoardLabel->height();
-//    int w = this->width();
+void MainWindow::createDockWindow()
+{
+    fretBoardLabel = new QLabel;
+    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+    int h = fretBoardLabel->height();
+    int w = this->width();
 
-//    qDebug() << h;
-//    qDebug() << w;
-//    fretBoardDock = new QDockWidget("fretbord");
-//    fretBoardDock->setObjectName("fretBoardDock");
-//    fretBoardDock->setWidget(fretBoardLabel);
-//    //fretBoardDock->setFixedHeight(fretBoardLabel->minimumHeight());
-//    //fretBoardDock->setFixedWidth(fretBoardLabel->minimumWidth());
-//    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
-//                                   Qt::BottomDockWidgetArea);
-//    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
+    qDebug() << h;
+    qDebug() << w;
+    fretBoardDock = new QDockWidget("fretbord");
+    fretBoardDock->setObjectName("fretBoardDock");
+    fretBoardDock->setWidget(fretBoardLabel);
+    //fretBoardDock->setFixedHeight(fretBoardLabel->minimumHeight());
+    //fretBoardDock->setFixedWidth(fretBoardLabel->minimumWidth());
+    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
+                                   Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
 
-//    //noteLabel = new QLabel(fretBoardDock);
-//    //noteLabel->setPixmap(QPixmap(":/noteDot.png"));
-//    //noteLabel->setGeometry(190, 200, w, h);
-//}
+    //noteLabel = new QLabel(fretBoardDock);
+    //noteLabel->setPixmap(QPixmap(":/noteDot.png"));
+    //noteLabel->setGeometry(190, 200, w, h);
+}
 
 void MainWindow::submitPressed()
 {
@@ -336,8 +345,8 @@ void MainWindow::buildScale(const int scaleFormula[], const int size)
 
 void MainWindow::drawScale()
 {
-    int x = 30;//65
-    int y = 75;//0
+    int x = 45;
+    int y = 38;
 
     noteLabel = new QLabel *[6];
 
@@ -378,7 +387,7 @@ void MainWindow::drawScale()
             x += 95;//increment pixel length to next fret
             notePos++;
         }
-        x = 30;
+        x = 45;
         y += 40;//increment pixel length to next string
     }
 }
