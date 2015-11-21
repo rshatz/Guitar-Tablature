@@ -93,7 +93,6 @@ void MainWindow::createToolBar()
     scaleComboBox->insertSeparator(11);
     scaleComboBox->addItem("All Notes");
 
-
     tuningComboBox = new QComboBox;
     tuningComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
@@ -125,37 +124,18 @@ void MainWindow::createToolBar()
     connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));
 }
 
-void MainWindow::createDockWindow()
-{
-    fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
-    int h = fretBoardLabel->height();
-    int w = this->width();
-
-    qDebug() << h;
-    qDebug() << w;
-    fretBoardDock = new QDockWidget("fretbord");
-    fretBoardDock->setObjectName("fretBoardDock");
-    fretBoardDock->setWidget(fretBoardLabel);
-    //fretBoardDock->setFixedHeight(fretBoardLabel->minimumHeight());
-    //fretBoardDock->setFixedWidth(fretBoardLabel->minimumWidth());
-    fretBoardDock->setAllowedAreas(Qt::TopDockWidgetArea |
-                                   Qt::BottomDockWidgetArea);
-    addDockWidget(Qt::TopDockWidgetArea, fretBoardDock);
-
-    //noteLabel = new QLabel(fretBoardDock);
-    //noteLabel->setPixmap(QPixmap(":/noteDot.png"));
-    //noteLabel->setGeometry(190, 200, w, h);
-}
-
 void MainWindow::submitPressed()
 {
     for(int i = 0; i < 6; ++i) {
         delete [] noteLabel[i];
     }
     delete [] noteLabel;
+
     scaleDegrees.clear();
-    changeScale();
+    tuningFormula.clear();
+    notesDisplayLabel->clear();
+    setScale();
+    buildScale();
     setTuning();
     drawScale();
 
@@ -165,57 +145,58 @@ void MainWindow::submitPressed()
         noteList += notes[scaleDegrees[i]];
         noteList += " ";
     }
+
     notesDisplayLabel->setText(noteList);
 }
 
-void MainWindow::changeScale()
+void MainWindow::setScale()
 {
     switch(scaleComboBox->currentIndex())
     {
     case MAJOR:
-        major();
+        scaleFormula << 2 << 2 << 1 << 2 << 2 << 2 << 1;
         break;
     case MAJOR_PENTATONIC:
-        majorPentatonic();
+        scaleFormula << 2 << 2 << 3 << 2 << 3;
         break;
     case NATURAL_MINOR:
-        naturalMinor();
+        scaleFormula << 2 << 1 << 2 << 2 << 1 << 2 << 2;
         break;
     case MINOR_PENTATONIC:
-        minorPentatonic();
+        scaleFormula << 3 << 2 << 2 << 3 << 2;
         break;
     case HARMONIC_MINOR:
-        harmonicMinor();
+        scaleFormula << 2 << 1 << 2 << 2 << 1 << 3 << 2;
         break;
     case MELODIC_MINOR:
-        melodicMinor();
+        scaleFormula << 2 << 1 << 2 << 2 << 2 << 2 << 1;
         break;
     case BLUES:
-        blues();
+        scaleFormula << 3 << 2 << 1 << 1 << 3 << 2;
         break;
     case WHOLE_TONE:
-        wholeTone();
+        scaleFormula << 2 << 2 << 2 << 2 << 2 << 2;
         break;
     case WHOLE_HALF_DIM:
-        wholeHalfDim();
+        scaleFormula << 2 << 1 << 2 << 1 << 2 << 1 << 2 << 1;
         break;
     case HALF_WHOLE_DIM:
-        halfWholeDim();
+        scaleFormula << 1 << 2 << 1 << 2 << 1 << 2 << 1 << 2;
         break;
     case PHRYGIAN:
-        phrygian();
+
         break;
     case LYDIAN:
-        lydian();
+
         break;
     case MIXOLYDIAN:
-        mixolydian();
+
         break;
     case AEOLIAN:
-        aeolian();
+
         break;
     case LOCRIAN:
-        locraian();
+
         break;
     }
 }
@@ -225,122 +206,29 @@ void MainWindow::setTuning()
     switch(tuningComboBox->currentIndex())
     {
     case STANDARD:
-        tuningPositions = new int[6]{7, 2, 10, 5, 0, 7};
+        tuningFormula << 7 << 2 << 10 << 5 << 0 << 7;
         break;
     case DROP_D:
-        tuningPositions = new int[6]{7, 2, 10, 5, 0, 5};
+        tuningFormula << 7 << 2 << 10 << 5 << 0 << 5;
         break;
     case OPEN_A:
-        tuningPositions = new int[6]{7, 0, 7, 4, 0, 7};
+        tuningFormula << 7 << 0 << 7 << 4 << 0 << 7;
         break;
     case OPEN_C:
-        tuningPositions = new int[6]{7, 3, 10, 3, 10, 3 };
+        tuningFormula << 7 << 3 << 10 << 3 << 10 << 3;
+        break;
     }
 }
 
-void MainWindow::major()
-{
-    const int formula[] = {2, 2, 1, 2, 2, 2, 1};
-    const int SIZE = 7;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::majorPentatonic()
-{
-    const int formula[] = {2, 2, 3, 2, 3};
-    const int SIZE = 5;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::naturalMinor()
-{
-    const int formula[] = {2, 1, 2, 2, 1, 2, 2};
-    const int SIZE = 7;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::minorPentatonic()
-{
-    const int formula[] = {3, 2, 2, 3, 2};
-    const int SIZE = 5;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::harmonicMinor()
-{
-    const int formula[] = {2, 1, 2, 2, 1, 3, 2};
-    const int SIZE = 7;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::melodicMinor()
-{
-    const int formula[] = {2, 1, 2, 2, 2, 2, 1};
-    const int SIZE = 7;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::blues()
-{
-    const int formula[] = {3, 2, 1, 1, 3, 2};
-    const int SIZE = 6;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::wholeTone()
-{
-    const int formula[] = {2, 2, 2, 2, 2, 2};
-    const int SIZE = 6;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::wholeHalfDim()
-{
-    const int formula[] = {2, 1, 2, 1, 2, 1, 2, 1};
-    const int SIZE = 8;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::halfWholeDim()
-{
-    const int formula[] = {1, 2, 1, 2, 1, 2, 1, 2};
-    const int SIZE = 8;
-    buildScale(formula, SIZE);
-}
-
-void MainWindow::phrygian()
-{
-
-}
-
-void MainWindow::lydian()
-{
-
-}
-
-void MainWindow::mixolydian()
-{
-
-}
-
-void MainWindow::aeolian()
-{
-
-}
-
-void MainWindow::locraian()
-{
-
-}
-
-void MainWindow::buildScale(const int scaleFormula[], const int size)
+void MainWindow::buildScale()
 {
     int position = keyComboBox->currentIndex();
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < scaleFormula.size(); i++)
     {
         scaleDegrees.append(position % 12);
         position += scaleFormula[i];
     }
+    scaleFormula.clear();
 }
 
 void MainWindow::drawScale()
@@ -362,8 +250,7 @@ void MainWindow::drawScale()
     QVectorIterator<int> i(scaleDegrees);
     for(int string = 0; string < 6; string++)
     {
-        int notePos = tuningPositions[string];
-        //noteLabel[string] = new QLabel[13];
+        int notePos = tuningFormula[string];
 
         for(int fret = 0; fret < 13; fret++)
         {
@@ -372,7 +259,7 @@ void MainWindow::drawScale()
                 notePos = 0;
             }
 
-            noteLabel[string][fret].setParent(this/*fretBoardLabel*/);
+            noteLabel[string][fret].setParent(this);
             noteLabel[string][fret].setText(notes[notePos]);
             noteLabel[string][fret].setGeometry(x, y, 32, 32);
 

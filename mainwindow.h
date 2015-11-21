@@ -22,25 +22,9 @@ public slots:
 private:
 
     void createToolBar();
-    void createDockWindow();
-    void changeScale();
+    void setScale();
     void setTuning();
-    void major();
-    void majorPentatonic();
-    void naturalMinor();
-    void minorPentatonic();
-    void harmonicMinor();
-    void melodicMinor();
-    void blues();
-    void wholeTone();
-    void wholeHalfDim();
-    void halfWholeDim();
-    void phrygian();
-    void lydian();
-    void mixolydian();
-    void aeolian();
-    void locraian();
-    void buildScale(const int scaleFormula[], const int size);
+    void buildScale();
     void drawScale();
 
     enum { MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
@@ -50,10 +34,9 @@ private:
 
     enum { STANDARD, DROP_D, OPEN_A, OPEN_C, OPEN_D, OPEN_DM, OPEN_G };
 
-    QWidget *topWindowWidget;
-
     QVector<int> scaleDegrees;
-    int *tuningPositions;
+    QList<int> scaleFormula;
+    QList<int> tuningFormula;
     const static QString notes[];
 
     QToolBar *selectionToolBar;
