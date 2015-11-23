@@ -47,8 +47,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));    
 }
 
-const QString MainWindow::notes[] = {" A", "A#", " B", " C", "C#", " D",
-                                     "D#", " E", " F", "F#", " G", "G#"};
+const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
+                                     "D#", "E", "F", "F#", "G", "G#"};
 
 MainWindow::~MainWindow()
 {
@@ -273,13 +273,28 @@ void MainWindow::drawScale()
 
             noteLabels[string][fret].setParent(this);
             noteLabels[string][fret].setText(notes[notePos]);
-            noteLabels[string][fret].setStyleSheet(
-                        "font-size: 22px;"
-                        "font: bold large Times New Roman;"
-                        "color: white;"
-                        "background-image: url(:/noteDot.png);"
-                        //"text-align: center;"
-                        );
+
+            if(!noteLabels[string][fret].text().contains("#"))
+            {
+                noteLabels[string][fret].setStyleSheet(
+                            "padding: 3px;"
+                            "font-size: 24px;"
+                            "font: large Consolas;"
+                            "color: white;"
+                            "background-image: url(:/noteDot.png);"
+                            );
+            }
+            else
+            {
+                noteLabels[string][fret].setStyleSheet(
+                            "padding: 1px;"
+                            "font-size: 24px;"
+                            "font: large Consolas;"
+                            "color: white;"
+                            "background-image: url(:/noteDot.png);"
+                            );
+            }
+
             noteLabels[string][fret].setGeometry(x, y, 32, 32);
 
             while(i.hasNext())
