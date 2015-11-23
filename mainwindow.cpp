@@ -10,48 +10,45 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    noteLabel = new QLabel *[6];
+    noteLabels = new QLabel *[6];
 
     for(int i = 0; i < 6; i++)
     {
-        noteLabel[i] = new QLabel[13];
+        noteLabels[i] = new QLabel[13];
         for(int u = 0; u < 13; u++)
         {
-            noteLabel[i][u].setText("");
+            noteLabels[i][u].setText("");
         }
     }
 
     createToolBar();
 
-    fretBoardLabel = new QLabel(this);
+//    QHBoxLayout *bottomLayout = new QHBoxLayout;
+//    tabSheet = new QPlainTextEdit;
+//    bottomLayout->addWidget(tabSheet);
+
+//    QVBoxLayout *mainLayout = new QVBoxLayout;
+//    mainLayout->addLayout(topLayout);
+//    mainLayout->addLayout(bottomLayout);
+//    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    fretBoardLabel = new QLabel;
     fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
 
-    notesDisplayLabel = new QLabel(this);
-
     QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(60, 15, 50, 0);
+    topLayout->setContentsMargins(60, 20, 50, 20);
     topLayout->addWidget(fretBoardLabel);
-    topLayout->addWidget(notesDisplayLabel);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    tabSheet = new QPlainTextEdit;
-    bottomLayout->addWidget(tabSheet);
+    QWidget *centralWidget = new QWidget;
+    centralWidget->setLayout(topLayout);
+    setCentralWidget(centralWidget);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(topLayout);
-    mainLayout->addLayout(bottomLayout);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-
-    QWidget *centralWidgetLayout = new QWidget;
-    centralWidgetLayout->setLayout(mainLayout);
-
-    setCentralWidget(centralWidgetLayout);
-
+    connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));    
 }
 
-const QString MainWindow::notes[] = {"A", "A#", "B", "C", "C#", "D",
-                                     "D#", "E", "F", "F#", "G", "G#"};
+const QString MainWindow::notes[] = {" A", "A#", " B", " C", "C#", " D",
+                                     "D#", " E", " F", "F#", " G", "G#"};
 
 MainWindow::~MainWindow()
 {
@@ -85,12 +82,13 @@ void MainWindow::createToolBar()
     scaleComboBox->addItem("minor pentatonic");
     scaleComboBox->addItem("harmonic minor");
     scaleComboBox->addItem("melodic minor");
-    scaleComboBox->insertSeparator(6);
+    //scaleComboBox->insertSeparator(6);
+    // adding separator counts as an index in combo box causing
+    // combo box index to misalign with enum index
     scaleComboBox->addItem("blues");
     scaleComboBox->addItem("whole tone");
     scaleComboBox->addItem("whole-half diminished ");
     scaleComboBox->addItem("half-whole diminished ");
-    scaleComboBox->insertSeparator(11);
     scaleComboBox->addItem("All Notes");
 
     tuningComboBox = new QComboBox;
@@ -101,11 +99,12 @@ void MainWindow::createToolBar()
 
     tuningComboBox->addItem("Standard");
     tuningComboBox->addItem("Drop D");
-    //tuningComboBox->insertSeparator(2);
     tuningComboBox->addItem("Open A");
+    tuningComboBox->addItem("Open B");
     tuningComboBox->addItem("Open C");
     tuningComboBox->addItem("Open D");
-    tuningComboBox->addItem("Open D Minor");
+    tuningComboBox->addItem("Open E");
+    tuningComboBox->addItem("Open F");
     tuningComboBox->addItem("Open G");
 
     submitButton = new QPushButton("Submit");
@@ -120,33 +119,32 @@ void MainWindow::createToolBar()
     selectionToolBar->addWidget(tuningComboBox);
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(submitButton);
-
-    connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(submitPressed()));
 }
 
 void MainWindow::submitPressed()
 {
     for(int i = 0; i < 6; ++i) {
-        delete [] noteLabel[i];
+        delete [] noteLabels[i];
     }
-    delete [] noteLabel;
+    delete [] noteLabels;
 
     scaleDegrees.clear();
     tuningFormula.clear();
-    notesDisplayLabel->clear();
+    //notesDisplayLabel->clear();
+
     setScale();
     buildScale();
     setTuning();
     drawScale();
 
-    QString noteList;
-    for(int i = 0; i < scaleDegrees.size(); i++)
-    {
-        noteList += notes[scaleDegrees[i]];
-        noteList += " ";
-    }
+//    QString noteList;
+//    for(int i = 0; i < scaleDegrees.size(); i++)
+//    {
+//        noteList += notes[scaleDegrees[i]];
+//        noteList += " ";
+//    }
 
-    notesDisplayLabel->setText(noteList);
+//    notesDisplayLabel->setText(noteList);
 }
 
 void MainWindow::setScale()
@@ -214,8 +212,22 @@ void MainWindow::setTuning()
     case OPEN_A:
         tuningFormula << 7 << 0 << 7 << 4 << 0 << 7;
         break;
+    case OPEN_B:
+        tuningFormula << 2 << 9 << 2 << 9 << 2 << 6;
     case OPEN_C:
         tuningFormula << 7 << 3 << 10 << 3 << 10 << 3;
+        break;
+    case OPEN_D:
+        tuningFormula << 5 << 0 << 5 << 9 << 0 << 5;
+        break;
+    case OPEN_E:
+        tuningFormula << 7 << 2 << 7 << 11 << 2 << 7;
+        break;
+    case OPEN_F:
+        tuningFormula << 3 << 8 << 3 << 8 << 0 << 3;
+        break;
+    case OPEN_G:
+        tuningFormula << 5 << 10 << 5 << 10 << 2 << 5;
         break;
     }
 }
@@ -233,17 +245,17 @@ void MainWindow::buildScale()
 
 void MainWindow::drawScale()
 {
-    int x = 45;
-    int y = 38;
+    int x = 10;
+    int y = 45;
 
-    noteLabel = new QLabel *[6];
+    noteLabels = new QLabel *[6];
 
     for(int i = 0; i < 6; i++)
     {
-        noteLabel[i] = new QLabel[13];
+        noteLabels[i] = new QLabel[13];
         for(int u = 0; u < 13; u++)
         {
-            noteLabel[i][u].setText("");
+            noteLabels[i][u].setText("");
         }
     }
 
@@ -259,22 +271,29 @@ void MainWindow::drawScale()
                 notePos = 0;
             }
 
-            noteLabel[string][fret].setParent(this);
-            noteLabel[string][fret].setText(notes[notePos]);
-            noteLabel[string][fret].setGeometry(x, y, 32, 32);
+            noteLabels[string][fret].setParent(this);
+            noteLabels[string][fret].setText(notes[notePos]);
+            noteLabels[string][fret].setStyleSheet(
+                        "font-size: 22px;"
+                        "font: bold large Times New Roman;"
+                        "color: white;"
+                        "background-image: url(:/noteDot.png);"
+                        //"text-align: center;"
+                        );
+            noteLabels[string][fret].setGeometry(x, y, 32, 32);
 
             while(i.hasNext())
             {
-                if(noteLabel[string][fret].text() == notes[i.next()])
+                if(noteLabels[string][fret].text() == notes[i.next()])
                 {
-                    noteLabel[string][fret].show();
+                    noteLabels[string][fret].show();
                 }
             }
             i.toFront();
             x += 95;//increment pixel length to next fret
             notePos++;
         }
-        x = 45;
+        x = 10;
         y += 40;//increment pixel length to next string
     }
 }
