@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     createToolBar();
 
     fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/FretBoard.jpg"));
+    fretBoardLabel->setPixmap(QPixmap(":/fretBoard.jpg"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);

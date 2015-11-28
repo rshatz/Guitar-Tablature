@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>FretBoard.jpg</file>
-        <file>noteDot.png</file>
+        <file>blueDot.png</file>
+        <file>redDot.png</file>
+        <file>fretBoard.jpg</file>
     </qresource>
 </RCC>
