@@ -1,9 +1,5 @@
-#include <QDebug>
-
-#include <QToolBar>
-#include <QDockWidget>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QToolBar>
 
 #include "mainwindow.h"
 #include "musicscales.h"
@@ -11,11 +7,13 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    this->setWindowTitle("Guitar Scales");
+
     musicScale = new MusicScales(this);
     createToolBar();
 
     fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/fretBoard.jpg"));
+    fretBoardLabel->setPixmap(QPixmap(":/fretboard.png"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);
@@ -23,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     QWidget *centralWidget = new QWidget;
+    centralWidget->setStyleSheet("background: black;");
     centralWidget->setLayout(topLayout);
     setCentralWidget(centralWidget);
 }
@@ -69,7 +68,11 @@ void MainWindow::createToolBar()
     scaleComboBox->addItem("whole tone");
     scaleComboBox->addItem("whole-half diminished ");
     scaleComboBox->addItem("half-whole diminished ");
-    scaleComboBox->addItem("All Notes");
+    scaleComboBox->addItem("phrygian");
+    scaleComboBox->addItem("lydian");
+    scaleComboBox->addItem("mixolydian");
+    scaleComboBox->addItem("aeolian");
+    scaleComboBox->addItem("locrian");
 
     scaleLabel = new QLabel("   S&cale ");
     scaleLabel->setBuddy(scaleComboBox);
@@ -93,6 +96,7 @@ void MainWindow::createToolBar()
     submitButton = new QPushButton("Submit");
 
     selectionToolBar = addToolBar("Selection Tool Bar");
+    selectionToolBar->setMovable(false);
 
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
@@ -122,7 +126,6 @@ void MainWindow::createToolBar()
 void MainWindow::keyChange()
 {
     musicScale->setKey(keyComboBox->currentIndex());
-
 }
 
 void MainWindow::scaleChange()

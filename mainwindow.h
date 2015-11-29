@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 #include <QComboBox>
-#include <QLabel>
 #include <QPushButton>
-#include <QPlainTextEdit>
+#include <QLabel>
 
 #include "musicscales.h"
 
@@ -36,15 +35,11 @@ private:
 
     QPushButton *submitButton;
 
-    QDockWidget *fretBoardDock;
-
     QLabel **noteLabels;
     QLabel *fretBoardLabel;
     QLabel *keyLabel;
     QLabel *scaleLabel;
     QLabel *tuningLabel;
-
-    QLabel *noteOnDot;
 
     MusicScales *musicScale;
 };

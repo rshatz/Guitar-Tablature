@@ -1,7 +1,5 @@
 
-#include <QDebug>
 #include "musicscales.h"
-#include "mainwindow.h"
 
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 {
@@ -49,25 +47,30 @@ void MusicScales::setScale(int scale)
         scaleFormula << 1 << 2 << 1 << 2 << 1 << 2 << 1 << 2;
         break;
     case PHRYGIAN:
-
+        scaleFormula << 1 << 2 << 2 << 2 << 1 << 2 << 2;
         break;
     case LYDIAN:
-
+        scaleFormula << 2 << 2 << 2 << 1 << 2 << 2 << 1;
         break;
     case MIXOLYDIAN:
-
+        scaleFormula << 2 << 2 << 1 << 2 << 2 << 1 << 2;
         break;
     case AEOLIAN:
-
+        scaleFormula << 2 << 1 << 2 << 2 << 1 << 2 << 2;
         break;
     case LOCRIAN:
-
+        scaleFormula << 1 << 2 << 2 << 1 << 2 << 2 << 2;
         break;
     }
 }
 
 void MusicScales::setTuning(int tuning)
 {
+    //tuning formulas created starting on 1st string
+    //instead of traditional method of being created
+    //starting on the 6th string.
+    //this will be changed later by changing x and y
+    //coodrinate array's sort order
     tuningFormula.clear();
     switch(tuning)
     {
@@ -81,21 +84,21 @@ void MusicScales::setTuning(int tuning)
         tuningFormula << 7 << 0 << 7 << 4 << 0 << 7;
         break;
     case OPEN_B:
-        tuningFormula << 2 << 9 << 2 << 9 << 2 << 6;
+        tuningFormula << 6 << 2 << 9 << 2 << 9 << 2;
     case OPEN_C:
         tuningFormula << 7 << 3 << 10 << 3 << 10 << 3;
         break;
     case OPEN_D:
-        tuningFormula << 5 << 0 << 5 << 9 << 0 << 5;
+        tuningFormula << 5 << 0 << 9 << 5 << 0 << 5;
         break;
     case OPEN_E:
-        tuningFormula << 7 << 2 << 7 << 11 << 2 << 7;
+        tuningFormula << 7 << 2 << 11 << 7 << 2 << 7;
         break;
     case OPEN_F:
-        tuningFormula << 3 << 8 << 3 << 8 << 0 << 3;
+        tuningFormula << 8 << 0 << 8 << 3 << 8 << 3;
         break;
     case OPEN_G:
-        tuningFormula << 5 << 10 << 5 << 10 << 2 << 5;
+        tuningFormula << 5 << 2 << 10 << 5 << 10 << 5;
         break;
     }
 }
@@ -129,8 +132,11 @@ void MusicScales::drawScale()
 
     buildScale();
 
-    int x = 10;
-    int y = 45;
+    const int yCoordinate[13] = {104, 148, 192, 236, 280, 324};
+
+    const int xCoordinate[13] = {25, 110, 200, 290, 380, 470, 565, 652,
+                          750, 835, 925, 1015, 1105};
+
     int rootNote = scaleDegrees[0];
 
     fretBoardNotes = new QLabel *[6];
@@ -139,10 +145,12 @@ void MusicScales::drawScale()
     for(int string = 0; string < 6; string++)
     {
         int notePos = tuningFormula[string];
+        int y = yCoordinate[string];
         fretBoardNotes[string] = new QLabel[13];
 
         for(int fret = 0; fret < 13; fret++)
         {
+            int x = xCoordinate[fret];
             if(notePos >= 12)
             {
                 notePos = 0;
@@ -180,7 +188,7 @@ void MusicScales::drawScale()
                         == noteList[rootNote])
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 3px;"
+                                "padding: 4px;"
                                 "font-size: 24px;"
                                 "font: large Consolas;"
                                 "color: white;"
@@ -189,7 +197,7 @@ void MusicScales::drawScale()
                 else
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 3px;"
+                                "padding: 4px;"
                                 "font-size: 24px;"
                                 "font: large Consolas;"
                                 "color: white;"
@@ -204,11 +212,8 @@ void MusicScales::drawScale()
                 }
             }
             i.toFront();
-            x += 95;//increment pixel length to next fret
             notePos++;
         }
-        x = 10;
-        y += 40;//increment pixel length to next string
     }
     fretBoardfilled = true;
 }

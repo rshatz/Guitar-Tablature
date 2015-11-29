@@ -3,5 +3,6 @@
         <file>blueDot.png</file>
         <file>redDot.png</file>
         <file>fretBoard.jpg</file>
+        <file>fretboard.png</file>
     </qresource>
 </RCC>
