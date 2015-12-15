@@ -132,21 +132,21 @@ void MusicScales::drawScale()
 
     buildScale();
 
-    const int yCoordinate[13] = {104, 148, 192, 236, 280, 324};
+    const int yCoordinate[13] = {65, 109, 153, 197, 241, 285};
 
     const int xCoordinate[13] = {25, 110, 200, 290, 380, 470, 565, 652,
                           750, 835, 925, 1015, 1105};
 
     int rootNote = scaleDegrees[0];
 
-    fretBoardNotes = new QLabel *[6];
+    fretBoardNotes = new QPushButton *[6];
 
     QListIterator<int> i(scaleDegrees);
     for(int string = 0; string < 6; string++)
     {
         int notePos = tuningFormula[string];
         int y = yCoordinate[string];
-        fretBoardNotes[string] = new QLabel[13];
+        fretBoardNotes[string] = new QPushButton[13];
 
         for(int fret = 0; fret < 13; fret++)
         {
@@ -158,7 +158,7 @@ void MusicScales::drawScale()
 
             fretBoardNotes[string][fret].setParent(QWidget::parentWidget());
             fretBoardNotes[string][fret].setText(noteList[notePos]);
-            fretBoardNotes[string][fret].setGeometry(x, y, 35, 35);
+            fretBoardNotes[string][fret].setGeometry(x, y, 38, 38);
 
             if(fretBoardNotes[string][fret].text().contains("#"))
             {
@@ -166,20 +166,22 @@ void MusicScales::drawScale()
                         == noteList[rootNote])
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 2px;"
+                                "text-align: center;"
                                 "font-size: 24px;"
-                                "font: large Consolas;"
+                                "font: Consolas;"
                                 "color: white;"
-                                "background-image: url(:/redDot.png);");
+                                "background-color: maroon;"
+                                "border-radius: 19px;");
                 }
                 else
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 2px;"
+                                "text-align: center;"
                                 "font-size: 24px;"
-                                "font: large Consolas;"
+                                "font: large bold Consolas;"
                                 "color: white;"
-                                "background-image: url(:/blueDot.png);");
+                                "background-color: teal;"
+                                "border-radius: 19px;");
                 }
             }
             else
@@ -188,20 +190,22 @@ void MusicScales::drawScale()
                         == noteList[rootNote])
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 4px;"
+                                "text-align: center;"
                                 "font-size: 24px;"
-                                "font: large Consolas;"
+                                "font: large bold Consolas;"
                                 "color: white;"
-                                "background-image: url(:/redDot.png);");
+                                "background-color: maroon;"
+                                "border-radius: 19px;");
                 }
                 else
                 {
                     fretBoardNotes[string][fret].setStyleSheet(
-                                "padding: 4px;"
+                                "text-align: center;"
                                 "font-size: 24px;"
-                                "font: large Consolas;"
+                                "font: large bold Consolas;"
                                 "color: white;"
-                                "background-image: url(:/blueDot.png);");
+                                "background-color: teal;"
+                                "border-radius: 19px;");
                 }
             }
             while(i.hasNext())

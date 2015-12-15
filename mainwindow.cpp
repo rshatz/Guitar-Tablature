@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QToolBar>
+#include <QFile>
 
 #include "mainwindow.h"
 #include "musicscales.h"
@@ -8,8 +9,14 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle("Guitar Scales");
+    QFile file(":/stylesheet.qss");
+        if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            setStyleSheet(file.readAll());
+            file.close();
+        }
 
-    musicScale = new MusicScales(this);
+    musicScale = new MusicScales;
     createToolBar();
 
     fretBoardLabel = new QLabel;
@@ -18,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);
     topLayout->addWidget(fretBoardLabel);
+    topLayout->addWidget(musicScale);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     QWidget *centralWidget = new QWidget;
@@ -97,6 +105,8 @@ void MainWindow::createToolBar()
 
     selectionToolBar = addToolBar("Selection Tool Bar");
     selectionToolBar->setMovable(false);
+    //QSize size = selectionToolBar->sizeHint();
+    //selectionToolBar->setFixedSize(20, 20);
 
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);

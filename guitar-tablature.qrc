@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>blueDot.png</file>
-        <file>redDot.png</file>
-        <file>fretBoard.jpg</file>
         <file>fretboard.png</file>
+        <file>stylesheet.qss</file>
     </qresource>
 </RCC>

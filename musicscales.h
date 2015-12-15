@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QLabel>
 
+#include <QPushButton>
+#include <QLineEdit>
+
 class MusicScales : public QWidget
 {
     Q_OBJECT
@@ -34,7 +37,7 @@ private:
             << "A" << "A#" << "B" << "C" << "C#" << "D"
             << "D#" << "E" << "F" << "F#" << "G" << "G#";
 
-    QLabel **fretBoardNotes;
+    QPushButton **fretBoardNotes;
     bool fretBoardfilled;
 
     int *key;
@@ -42,5 +45,6 @@ private:
     QList<int> scaleFormula;
     QList<int> tuningFormula;
 };
+
 
 #endif // MUSICSCALES_H
