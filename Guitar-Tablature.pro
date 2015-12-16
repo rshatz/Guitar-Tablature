@@ -24,6 +24,3 @@ RESOURCES += \
     guitar-tablature.qrc
 
 DISTFILES +=
-
-FORMS += \
-    button.ui

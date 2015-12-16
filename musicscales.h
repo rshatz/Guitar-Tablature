@@ -20,6 +20,9 @@ public:
     void setTuning(int tuning);
     void drawScale();
 
+private slots:
+    void testSlot();
+
 private:
 
     void buildScale();
@@ -45,6 +48,5 @@ private:
     QList<int> scaleFormula;
     QList<int> tuningFormula;
 };
-
 
 #endif // MUSICSCALES_H

@@ -1,4 +1,4 @@
-
+#include <QDebug>
 #include "musicscales.h"
 
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
@@ -68,9 +68,8 @@ void MusicScales::setTuning(int tuning)
 {
     //tuning formulas created starting on 1st string
     //instead of traditional method of being created
-    //starting on the 6th string.
-    //this will be changed later by changing x and y
-    //coodrinate array's sort order
+    //starting on the 6th string. Hence, formulas are
+    //represented here in backwards order.
     tuningFormula.clear();
     switch(tuning)
     {
@@ -132,10 +131,10 @@ void MusicScales::drawScale()
 
     buildScale();
 
-    const int yCoordinate[13] = {65, 109, 153, 197, 241, 285};
+    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
 
-    const int xCoordinate[13] = {25, 110, 200, 290, 380, 470, 565, 652,
-                          750, 835, 925, 1015, 1105};
+    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
+                          733, 825, 915, 1010, 1100};
 
     int rootNote = scaleDegrees[0];
 
@@ -158,56 +157,19 @@ void MusicScales::drawScale()
 
             fretBoardNotes[string][fret].setParent(QWidget::parentWidget());
             fretBoardNotes[string][fret].setText(noteList[notePos]);
-            fretBoardNotes[string][fret].setGeometry(x, y, 38, 38);
+            fretBoardNotes[string][fret].setGeometry(x, y, 38, 30);
 
-            if(fretBoardNotes[string][fret].text().contains("#"))
+            if(fretBoardNotes[string][fret].text() == noteList[rootNote])
             {
-                if(fretBoardNotes[string][fret].text()
-                        == noteList[rootNote])
-                {
-                    fretBoardNotes[string][fret].setStyleSheet(
-                                "text-align: center;"
-                                "font-size: 24px;"
-                                "font: Consolas;"
-                                "color: white;"
-                                "background-color: maroon;"
-                                "border-radius: 19px;");
-                }
-                else
-                {
-                    fretBoardNotes[string][fret].setStyleSheet(
-                                "text-align: center;"
-                                "font-size: 24px;"
-                                "font: large bold Consolas;"
-                                "color: white;"
-                                "background-color: teal;"
-                                "border-radius: 19px;");
-                }
+                fretBoardNotes[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
+                fretBoardNotes[string][fret].setStyleSheet("background-color: maroon;");
             }
             else
             {
-                if(fretBoardNotes[string][fret].text()
-                        == noteList[rootNote])
-                {
-                    fretBoardNotes[string][fret].setStyleSheet(
-                                "text-align: center;"
-                                "font-size: 24px;"
-                                "font: large bold Consolas;"
-                                "color: white;"
-                                "background-color: maroon;"
-                                "border-radius: 19px;");
-                }
-                else
-                {
-                    fretBoardNotes[string][fret].setStyleSheet(
-                                "text-align: center;"
-                                "font-size: 24px;"
-                                "font: large bold Consolas;"
-                                "color: white;"
-                                "background-color: teal;"
-                                "border-radius: 19px;");
-                }
+                fretBoardNotes[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
+                fretBoardNotes[string][fret].setStyleSheet("background-color: teal;");
             }
+
             while(i.hasNext())
             {
                 if(fretBoardNotes[string][fret].text() == noteList[i.next()])
@@ -220,4 +182,9 @@ void MusicScales::drawScale()
         }
     }
     fretBoardfilled = true;
+}
+
+void MusicScales::testSlot()
+{
+    qDebug() << "CLICKED!";
 }

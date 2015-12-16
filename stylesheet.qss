@@ -1,20 +1,34 @@
-QPushButton {
+QPushButton#noteButton, #rootButton {
     border: 2px solid #8f8f91;
-    border-radius: 6px;
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #f6f7fa, stop: 1 #dadbde);
     min-width: 50px;
 }
+QPushButton#rootButton {
 
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+    text-align: center;
+    font-size: 24px;
+    font: consolas;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+}
+QPushButton#noteButton {
+
+    background-color: teal;
+    text-align: center;
+    font-size: 24px;
+    font: consolas;
+    color: white;
+    border-radius: 15px;
 }
 
+QPushButton:hover#rootButton {
+    background-color: white;
+}
 QPushButton:flat {
     border: none; /* no border for a flat push button */
 }
 
-QPushButton:default {
+QPushButton:default#rootButton {
     border-color: navy; /* make the default button prominent */
 }
+

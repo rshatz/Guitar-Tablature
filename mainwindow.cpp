@@ -9,12 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle("Guitar Scales");
-    QFile file(":/stylesheet.qss");
-        if(file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            setStyleSheet(file.readAll());
-            file.close();
-        }
 
     musicScale = new MusicScales;
     createToolBar();
@@ -105,8 +99,6 @@ void MainWindow::createToolBar()
 
     selectionToolBar = addToolBar("Selection Tool Bar");
     selectionToolBar->setMovable(false);
-    //QSize size = selectionToolBar->sizeHint();
-    //selectionToolBar->setFixedSize(20, 20);
 
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
