@@ -162,12 +162,23 @@ void MusicScales::drawScale()
             if(fretBoardNotes[string][fret].text() == noteList[rootNote])
             {
                 fretBoardNotes[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
-                fretBoardNotes[string][fret].setStyleSheet("background-color: maroon;");
+                fretBoardNotes[string][fret].setStyleSheet("QPushButton#rootButton{background-color: maroon;}"
+                                                           "QPushButton#rootButton:hover{border: 2px solid grey;}"
+                                                           "QPushButton#rootButton:pressed{color: black}"
+                                                           "QPushButton#rootButton:pressed{background-color: "
+                                                           "qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)};"
+                                                           );
+
             }
             else
             {
                 fretBoardNotes[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
-                fretBoardNotes[string][fret].setStyleSheet("background-color: teal;");
+                fretBoardNotes[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
+                                                           "QPushButton#noteButton:hover{border: 2px solid grey;}"
+                                                           "QPushButton#noteButton:pressed{color: black}"
+                                                           "QPushButton#noteButton:pressed{background-color: "
+                                                           "qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)};"
+                                                           );
             }
 
             while(i.hasNext())

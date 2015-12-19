@@ -8,27 +8,13 @@ QPushButton#rootButton {
     font-size: 24px;
     font: consolas;
     color: white;
-    background-color: black;
     border-radius: 15px;
 }
 QPushButton#noteButton {
 
-    background-color: teal;
     text-align: center;
     font-size: 24px;
     font: consolas;
     color: white;
     border-radius: 15px;
 }
-
-QPushButton:hover#rootButton {
-    background-color: white;
-}
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-
-QPushButton:default#rootButton {
-    border-color: navy; /* make the default button prominent */
-}
-
