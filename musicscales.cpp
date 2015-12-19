@@ -149,6 +149,8 @@ void MusicScales::drawScale()
 
         for(int fret = 0; fret < 13; fret++)
         {
+            connect(&fretBoardNotes[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+            qDebug() << &fretBoardNotes[string][fret];
             int x = xCoordinate[fret];
             if(notePos >= 12)
             {
@@ -164,9 +166,7 @@ void MusicScales::drawScale()
                 fretBoardNotes[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
                 fretBoardNotes[string][fret].setStyleSheet("QPushButton#rootButton{background-color: maroon;}"
                                                            "QPushButton#rootButton:hover{border: 2px solid grey;}"
-                                                           "QPushButton#rootButton:pressed{color: black}"
-                                                           "QPushButton#rootButton:pressed{background-color: "
-                                                           "qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)};"
+                                                           "QPushButton#rootButton:pressed{background-color: #780000};"
                                                            );
 
             }
@@ -175,9 +175,7 @@ void MusicScales::drawScale()
                 fretBoardNotes[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
                 fretBoardNotes[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
                                                            "QPushButton#noteButton:hover{border: 2px solid grey;}"
-                                                           "QPushButton#noteButton:pressed{color: black}"
-                                                           "QPushButton#noteButton:pressed{background-color: "
-                                                           "qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)};"
+                                                           "QPushButton#noteButton:pressed{background-color: #007A7A};"
                                                            );
             }
 
