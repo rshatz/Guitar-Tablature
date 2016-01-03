@@ -149,8 +149,8 @@ void MusicScales::drawScale()
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardNotes[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
-            qDebug() << &fretBoardNotes[string][fret];
+            connect(&fretBoardNotes[string][fret], SIGNAL(clicked(bool)),
+                    this, SLOT(testSlot()));
             int x = xCoordinate[fret];
             if(notePos >= 12)
             {
