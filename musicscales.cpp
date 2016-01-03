@@ -118,9 +118,9 @@ void MusicScales::clearFretBoard()
     {
         for(int i = 0; i < 6; i++)
         {
-            delete [] fretBoardNotes[i];
+            delete [] fretBoardButton[i];
         }
-        delete [] fretBoardNotes;
+        delete [] fretBoardButton;
     }
 }
 
@@ -138,33 +138,33 @@ void MusicScales::drawScale()
 
     int rootNote = scaleDegrees[0];
 
-    fretBoardNotes = new QPushButton *[6];
+    fretBoardButton = new QPushButton *[6];
 
     QListIterator<int> i(scaleDegrees);
     for(int string = 0; string < 6; string++)
     {
         int notePos = tuningFormula[string];
         int y = yCoordinate[string];
-        fretBoardNotes[string] = new QPushButton[13];
+        fretBoardButton[string] = new QPushButton[13];
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardNotes[string][fret], SIGNAL(clicked(bool)),
-                    this, SLOT(testSlot()));
+            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+
             int x = xCoordinate[fret];
             if(notePos >= 12)
             {
                 notePos = 0;
             }
 
-            fretBoardNotes[string][fret].setParent(QWidget::parentWidget());
-            fretBoardNotes[string][fret].setText(noteList[notePos]);
-            fretBoardNotes[string][fret].setGeometry(x, y, 38, 30);
+            fretBoardButton[string][fret].setParent(QWidget::parentWidget());
+            fretBoardButton[string][fret].setText(noteList[notePos]);
+            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
 
-            if(fretBoardNotes[string][fret].text() == noteList[rootNote])
+            if(fretBoardButton[string][fret].text() == noteList[rootNote])
             {
-                fretBoardNotes[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
-                fretBoardNotes[string][fret].setStyleSheet("QPushButton#rootButton{background-color: maroon;}"
+                fretBoardButton[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
+                fretBoardButton[string][fret].setStyleSheet("QPushButton#rootButton{background-color: maroon;}"
                                                            "QPushButton#rootButton:hover{border: 2px solid grey;}"
                                                            "QPushButton#rootButton:pressed{background-color: #780000};"
                                                            );
@@ -172,8 +172,8 @@ void MusicScales::drawScale()
             }
             else
             {
-                fretBoardNotes[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
-                fretBoardNotes[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
+                fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
+                fretBoardButton[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
                                                            "QPushButton#noteButton:hover{border: 2px solid grey;}"
                                                            "QPushButton#noteButton:pressed{background-color: #007A7A};"
                                                            );
@@ -181,9 +181,9 @@ void MusicScales::drawScale()
 
             while(i.hasNext())
             {
-                if(fretBoardNotes[string][fret].text() == noteList[i.next()])
+                if(fretBoardButton[string][fret].text() == noteList[i.next()])
                 {
-                    fretBoardNotes[string][fret].show();
+                    fretBoardButton[string][fret].show();
                 }
             }
             i.toFront();
@@ -193,7 +193,50 @@ void MusicScales::drawScale()
     fretBoardfilled = true;
 }
 
-void MusicScales::testSlot()
+void MusicScales::drawAllNotes()
+{
+    scaleDegrees.clear();
+    clearFretBoard();
+    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
+
+    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
+                          733, 825, 915, 1010, 1100};
+
+    fretBoardButton = new QPushButton *[6];
+
+    for(int string = 0; string < 6; string++)
+    {
+        int notePos = tuningFormula[string];
+        int y = yCoordinate[string];
+        fretBoardButton[string] = new QPushButton[13];
+
+        for(int fret = 0; fret < 13; fret++)
+        {
+            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+
+            int x = xCoordinate[fret];
+            if(notePos >= 12)
+            {
+                notePos = 0;
+            }
+
+            fretBoardButton[string][fret].setParent(QWidget::parentWidget());
+            fretBoardButton[string][fret].setText(noteList[notePos]);
+            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
+
+            fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
+            fretBoardButton[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
+                                                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
+                                                        "QPushButton#noteButton:pressed{background-color: #007A7A};"
+                                                        );
+            fretBoardButton[string][fret].show();
+            notePos++;
+        }
+    }
+    fretBoardfilled = true;
+}
+
+void MusicScales::testSlot()//delete
 {
     qDebug() << "CLICKED!";
 }

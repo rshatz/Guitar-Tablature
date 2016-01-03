@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QLabel>
+#include <QCheckBox>
 
 #include "musicscales.h"
 
@@ -22,6 +23,8 @@ private slots:
     void scaleChange();
     void tuningChange();
     void drawScale();
+    void drawAllNotes();
+    void checkBoxState();
 
 private:
 
@@ -29,6 +32,7 @@ private:
 
     QToolBar *selectionToolBar;
 
+    QCheckBox *allNoteCheckBox;
     QComboBox *keyComboBox;
     QComboBox *scaleComboBox;
     QComboBox *tuningComboBox;

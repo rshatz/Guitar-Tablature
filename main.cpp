@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     QSize windowSize = w.sizeHint();//this block of code should
-    w.setFixedSize(windowSize);//should be deleted to enable mainwindow resize
+    w.setFixedSize(windowSize);//be deleted to enable mainwindow resize
 
     QFile file(":/stylesheet.qss");
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
