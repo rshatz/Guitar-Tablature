@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QToolBar>
+#include <QFile>
 
 #include "mainwindow.h"
 #include "musicscales.h"
@@ -9,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     this->setWindowTitle("Guitar Scales");
 
-    musicScale = new MusicScales(this);
+    musicScale = new MusicScales;
     createToolBar();
 
     fretBoardLabel = new QLabel;
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);
     topLayout->addWidget(fretBoardLabel);
+    topLayout->addWidget(musicScale);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     QWidget *centralWidget = new QWidget;
@@ -61,9 +63,6 @@ void MainWindow::createToolBar()
     scaleComboBox->addItem("minor pentatonic");
     scaleComboBox->addItem("harmonic minor");
     scaleComboBox->addItem("melodic minor");
-    //scaleComboBox->insertSeparator(6);
-    // adding separator counts as an index in combo box causing
-    // combo box index to misalign with enum index
     scaleComboBox->addItem("blues");
     scaleComboBox->addItem("whole tone");
     scaleComboBox->addItem("whole-half diminished ");
@@ -98,6 +97,7 @@ void MainWindow::createToolBar()
     selectionToolBar = addToolBar("Selection Tool Bar");
     selectionToolBar->setMovable(false);
 
+    allNoteCheckBox = new QCheckBox("Show All &Notes");
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
     selectionToolBar->addSeparator();
@@ -108,19 +108,19 @@ void MainWindow::createToolBar()
     selectionToolBar->addWidget(tuningComboBox);
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(submitButton);
+    selectionToolBar->addSeparator();
+    selectionToolBar->addWidget(allNoteCheckBox);
 
-    connect(keyComboBox, SIGNAL(activated(int)),
-            this, SLOT(keyChange()));
-    connect(scaleComboBox, SIGNAL(activated(int)),
-            this, SLOT(scaleChange()));
-    connect(tuningComboBox, SIGNAL(activated(int)),
-            this, SLOT(tuningChange()));
-    connect(submitButton, SIGNAL(clicked(bool)),
-            this, SLOT(drawScale()));
+    connect(keyComboBox, SIGNAL(activated(int)), this, SLOT(keyChange()));
+    connect(scaleComboBox, SIGNAL(activated(int)), this, SLOT(scaleChange()));
+    connect(tuningComboBox, SIGNAL(activated(int)), this, SLOT(tuningChange()));
+    //connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+    connect(allNoteCheckBox, SIGNAL(toggled(bool)), this, SLOT(checkBoxState()));
 
     keyChange();
     scaleChange();
     tuningChange();
+    checkBoxState();
 }
 
 void MainWindow::keyChange()
@@ -141,4 +141,29 @@ void MainWindow::tuningChange()
 void MainWindow::drawScale()
 {
     musicScale->drawScale();
+}
+
+void MainWindow::drawAllNotes()
+{
+    musicScale->drawAllNotes();
+}
+
+void MainWindow::checkBoxState()
+{
+    if(allNoteCheckBox->isChecked())
+    {
+        keyComboBox->setEnabled(false);
+        scaleComboBox->setEnabled(false);
+        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
+        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
+    }
+    else
+    {
+        keyComboBox->setEnabled(true);
+        scaleComboBox->setEnabled(true);
+        tuningComboBox->setEnabled(true);
+        submitButton->setEnabled(true);
+        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+    }
 }

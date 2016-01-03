@@ -1,0 +1,20 @@
+QPushButton#noteButton, #rootButton {
+    border: 2px solid #8f8f91;
+    min-width: 50px;
+}
+QPushButton#rootButton {
+
+    text-align: center;
+    font-size: 24px;
+    font: consolas;
+    color: white;
+    border-radius: 15px;
+}
+QPushButton#noteButton {
+
+    text-align: center;
+    font-size: 24px;
+    font: consolas;
+    color: white;
+    border-radius: 15px;
+}
