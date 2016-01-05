@@ -111,41 +111,17 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(allNoteCheckBox);
 
-    connect(keyComboBox, SIGNAL(activated(int)), this, SLOT(keyChange()));
-    connect(scaleComboBox, SIGNAL(activated(int)), this, SLOT(scaleChange()));
-    connect(tuningComboBox, SIGNAL(activated(int)), this, SLOT(tuningChange()));
-    //connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+    connect(keyComboBox, SIGNAL(activated(int)), musicScale, SLOT(setKey(int)));
+    connect(scaleComboBox, SIGNAL(activated(int)), musicScale, SLOT(setScale(int)));
+    connect(tuningComboBox, SIGNAL(activated(int)), musicScale, SLOT(setTuning(int)));
+    //connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
     connect(allNoteCheckBox, SIGNAL(toggled(bool)), this, SLOT(checkBoxState()));
 
-    keyChange();
-    scaleChange();
-    tuningChange();
+    musicScale->setKey(0);
+    musicScale->setScale(0);
+    musicScale->setTuning(0);
+
     checkBoxState();
-}
-
-void MainWindow::keyChange()
-{
-    musicScale->setKey(keyComboBox->currentIndex());
-}
-
-void MainWindow::scaleChange()
-{
-    musicScale->setScale(scaleComboBox->currentIndex());
-}
-
-void MainWindow::tuningChange()
-{
-    musicScale->setTuning(tuningComboBox->currentIndex());
-}
-
-void MainWindow::drawScale()
-{
-    musicScale->drawScale();
-}
-
-void MainWindow::drawAllNotes()
-{
-    musicScale->drawAllNotes();
 }
 
 void MainWindow::checkBoxState()
@@ -154,8 +130,8 @@ void MainWindow::checkBoxState()
     {
         keyComboBox->setEnabled(false);
         scaleComboBox->setEnabled(false);
-        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
-        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
+        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
     }
     else
     {
@@ -163,7 +139,7 @@ void MainWindow::checkBoxState()
         scaleComboBox->setEnabled(true);
         tuningComboBox->setEnabled(true);
         submitButton->setEnabled(true);
-        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
-        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
+        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
     }
 }

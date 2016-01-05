@@ -19,11 +19,6 @@ public:
 
 private slots:
 
-    void keyChange();
-    void scaleChange();
-    void tuningChange();
-    void drawScale();
-    void drawAllNotes();
     void checkBoxState();
 
 private:

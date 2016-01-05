@@ -15,13 +15,14 @@ public:
 
     MusicScales(QWidget *parent = 0);
 
+public slots:
+
     void setKey(int scaleKey);
     void setScale(int scale);
     void setTuning(int tuning);
     void drawScale();
     void drawAllNotes();
 
-private slots:
     void testSlot();//delete
 
 private:
