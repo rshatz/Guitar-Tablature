@@ -132,11 +132,6 @@ void MusicScales::drawScale()
 
     buildScale();
 
-    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
-
-    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
-                          733, 825, 915, 1010, 1100};
-
     int rootNote = scaleDegrees[0];
 
     fretBoardButton = new QPushButton *[6];
@@ -197,10 +192,6 @@ void MusicScales::drawAllNotes()
 {
     scaleDegrees.clear();
     clearFretBoard();
-    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
-
-    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
-                          733, 825, 915, 1010, 1100};
 
     fretBoardButton = new QPushButton *[6];
 
@@ -244,11 +235,6 @@ void MusicScales::testSlot()//delete
 
 void MusicScales::buildTabButtons()
 {
-    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
-
-    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
-                          733, 825, 915, 1010, 1100};
-
     fretBoardButton = new QPushButton *[6];
 
     for(int string = 0; string < 6; string++)
