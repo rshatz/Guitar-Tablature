@@ -22,13 +22,14 @@ public slots:
     void setTuning(int tuning);
     void drawScale();
     void drawAllNotes();
+    void clearFretBoard();
 
     void testSlot();//delete
 
 private:
 
     void buildScale();
-    void clearFretBoard();
+    void buildTabButtons();
 
     enum { MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
          HARMONIC_MINOR, MELODIC_MINOR, BLUES, WHOLE_TONE,

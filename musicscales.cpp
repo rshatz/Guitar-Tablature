@@ -122,6 +122,7 @@ void MusicScales::clearFretBoard()
         }
         delete [] fretBoardButton;
     }
+    fretBoardfilled = false;
 }
 
 void MusicScales::drawScale()
@@ -164,19 +165,18 @@ void MusicScales::drawScale()
             if(fretBoardButton[string][fret].text() == noteList[rootNote])
             {
                 fretBoardButton[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
-                fretBoardButton[string][fret].setStyleSheet("QPushButton#rootButton{background-color: maroon;}"
-                                                           "QPushButton#rootButton:hover{border: 2px solid grey;}"
-                                                           "QPushButton#rootButton:pressed{background-color: #780000};"
-                                                           );
-
+                fretBoardButton[string][fret].setStyleSheet(
+                            "QPushButton#rootButton{background-color: rgba(128, 0, 0, 200)}"
+                            "QPushButton#rootButton:hover{border: 2px solid white}"
+                            "QPushButton#rootButton:pressed{background-color: rgb(128, 0, 0)}");
             }
             else
             {
                 fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
-                fretBoardButton[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
-                                                           "QPushButton#noteButton:hover{border: 2px solid grey;}"
-                                                           "QPushButton#noteButton:pressed{background-color: #007A7A};"
-                                                           );
+                fretBoardButton[string][fret].setStyleSheet(
+                            "QPushButton#noteButton{background-color: rgba(0, 128, 128, 200)}"
+                            "QPushButton#noteButton:hover{border: 2px solid white}"
+                            "QPushButton#noteButton:pressed{background-color: rgb(0, 128, 128)}");
             }
 
             while(i.hasNext())
@@ -225,10 +225,11 @@ void MusicScales::drawAllNotes()
             fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
 
             fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
-            fretBoardButton[string][fret].setStyleSheet("QPushButton#noteButton{background-color: teal;}"
-                                                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
-                                                        "QPushButton#noteButton:pressed{background-color: #007A7A};"
-                                                        );
+            fretBoardButton[string][fret].setStyleSheet(
+                        "QPushButton#noteButton{background-color: teal;}"
+                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
+                        "QPushButton#noteButton:pressed{background-color: #007A7A};");
+
             fretBoardButton[string][fret].show();
             notePos++;
         }
@@ -239,4 +240,39 @@ void MusicScales::drawAllNotes()
 void MusicScales::testSlot()//delete
 {
     qDebug() << "CLICKED!";
+}
+
+void MusicScales::buildTabButtons()
+{
+    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
+
+    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
+                          733, 825, 915, 1010, 1100};
+
+    fretBoardButton = new QPushButton *[6];
+
+    for(int string = 0; string < 6; string++)
+    {
+        int y = yCoordinate[string];
+        fretBoardButton[string] = new QPushButton[13];
+
+        for(int fret = 0; fret < 13; fret++)
+        {
+            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+
+            int x = xCoordinate[fret];
+
+            fretBoardButton[string][fret].setParent(QWidget::parentWidget());
+
+            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
+
+            fretBoardButton[string][fret].setObjectName("tabButton");//set ID Selector for corresponding style sheet
+//            fretBoardButton[string][fret].setStyleSheet(
+//                        "QPushButton#noteButton:hover{background-color: rgba(255, 255, 255, 50);"
+//                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
+//                        "QPushButton#noteButton:pressed{background-color: #007A7A};");
+            fretBoardButton[string][fret].show();
+
+        }
+    }
 }

@@ -33,6 +33,7 @@ private:
     QComboBox *tuningComboBox;
 
     QPushButton *submitButton;
+    QPushButton *clearButton;
 
     QLabel **noteLabels;
     QLabel *fretBoardLabel;

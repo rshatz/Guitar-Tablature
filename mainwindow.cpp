@@ -1,6 +1,7 @@
 #include <QHBoxLayout>
 #include <QToolBar>
 #include <QFile>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "musicscales.h"
@@ -35,6 +36,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::createToolBar()
 {
+    selectionToolBar = addToolBar("Selection Tool Bar");
+    selectionToolBar->setMovable(false);
+
     keyComboBox = new QComboBox;
     keyComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
@@ -93,9 +97,7 @@ void MainWindow::createToolBar()
     tuningLabel->setBuddy(tuningComboBox);
 
     submitButton = new QPushButton("Submit");
-
-    selectionToolBar = addToolBar("Selection Tool Bar");
-    selectionToolBar->setMovable(false);
+    clearButton = new QPushButton("Clear");
 
     allNoteCheckBox = new QCheckBox("Show All &Notes");
     selectionToolBar->addWidget(keyLabel);
@@ -109,12 +111,14 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(submitButton);
     selectionToolBar->addSeparator();
+    selectionToolBar->addWidget(clearButton);
+    selectionToolBar->addSeparator();
     selectionToolBar->addWidget(allNoteCheckBox);
 
     connect(keyComboBox, SIGNAL(activated(int)), musicScale, SLOT(setKey(int)));
     connect(scaleComboBox, SIGNAL(activated(int)), musicScale, SLOT(setScale(int)));
     connect(tuningComboBox, SIGNAL(activated(int)), musicScale, SLOT(setTuning(int)));
-    //connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
+    connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(clearFretBoard()));
     connect(allNoteCheckBox, SIGNAL(toggled(bool)), this, SLOT(checkBoxState()));
 
     musicScale->setKey(0);
