@@ -4,7 +4,6 @@ QPushButton#noteButton, #rootButton {
 }
 QPushButton#rootButton {
 
-    background-color: rgb(128, 0, 0);
     text-align: center;
     font-size: 24px;
     font: consolas;
@@ -19,9 +18,8 @@ QPushButton#noteButton {
     color: white;
     border-radius: 15px;
 }
+QPushButton#tabButton {
 
-QPushButton#button {
-
-    background-color: rgb(128, 0, 0);
-
+    min-width: 50px;
+    border-radius: 15px;
 }

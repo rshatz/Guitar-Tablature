@@ -29,7 +29,6 @@ public slots:
 private:
 
     void buildScale();
-    void buildTabButtons();
 
     enum { MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
          HARMONIC_MINOR, MELODIC_MINOR, BLUES, WHOLE_TONE,

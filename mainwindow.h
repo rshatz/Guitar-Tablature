@@ -35,8 +35,7 @@ private:
     QPushButton *submitButton;
     QPushButton *clearButton;
 
-    QLabel **noteLabels;
-    QLabel *fretBoardLabel;
+    QLabel *fretBoardImage;
     QLabel *keyLabel;
     QLabel *scaleLabel;
     QLabel *tuningLabel;

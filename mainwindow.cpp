@@ -14,12 +14,12 @@ MainWindow::MainWindow(QWidget *parent)
     musicScale = new MusicScales;
     createToolBar();
 
-    fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/fretboard.png"));
+    fretBoardImage = new QLabel;
+    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);
-    topLayout->addWidget(fretBoardLabel);
+    topLayout->addWidget(fretBoardImage);
     topLayout->addWidget(musicScale);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -99,7 +99,8 @@ void MainWindow::createToolBar()
     submitButton = new QPushButton("Submit");
     clearButton = new QPushButton("Clear");
 
-    allNoteCheckBox = new QCheckBox("Show All &Notes");
+    allNoteCheckBox = new QCheckBox("Show All &Notes");//possibly not needed
+
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
     selectionToolBar->addSeparator();
@@ -112,20 +113,19 @@ void MainWindow::createToolBar()
     selectionToolBar->addWidget(submitButton);
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(clearButton);
-    selectionToolBar->addSeparator();
-    selectionToolBar->addWidget(allNoteCheckBox);
 
     connect(keyComboBox, SIGNAL(activated(int)), musicScale, SLOT(setKey(int)));
     connect(scaleComboBox, SIGNAL(activated(int)), musicScale, SLOT(setScale(int)));
     connect(tuningComboBox, SIGNAL(activated(int)), musicScale, SLOT(setTuning(int)));
     connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(clearFretBoard()));
-    connect(allNoteCheckBox, SIGNAL(toggled(bool)), this, SLOT(checkBoxState()));
+    connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
+    connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
 
-    musicScale->setKey(0);
-    musicScale->setScale(0);
-    musicScale->setTuning(0);
+    musicScale->setKey(keyComboBox->currentIndex());
+    musicScale->setScale(scaleComboBox->currentIndex());
+    musicScale->setTuning(tuningComboBox->currentIndex());
 
-    checkBoxState();
+    //checkBoxState(); maybe delete
 }
 
 void MainWindow::checkBoxState()

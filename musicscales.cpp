@@ -4,6 +4,7 @@
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 {
     fretBoardfilled = false;
+    //drawAllNotes();
 }
 
 void MusicScales::setKey(int scaleKey)
@@ -140,14 +141,13 @@ void MusicScales::drawScale()
     for(int string = 0; string < 6; string++)
     {
         int notePos = tuningFormula[string];
-        int y = yCoordinate[string];
+
         fretBoardButton[string] = new QPushButton[13];
 
         for(int fret = 0; fret < 13; fret++)
         {
             connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
 
-            int x = xCoordinate[fret];
             if(notePos >= 12)
             {
                 notePos = 0;
@@ -155,7 +155,7 @@ void MusicScales::drawScale()
 
             fretBoardButton[string][fret].setParent(QWidget::parentWidget());
             fretBoardButton[string][fret].setText(noteList[notePos]);
-            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
+            fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
 
             if(fretBoardButton[string][fret].text() == noteList[rootNote])
             {
@@ -197,32 +197,22 @@ void MusicScales::drawAllNotes()
 
     for(int string = 0; string < 6; string++)
     {
-        int notePos = tuningFormula[string];
-        int y = yCoordinate[string];
         fretBoardButton[string] = new QPushButton[13];
 
         for(int fret = 0; fret < 13; fret++)
         {
             connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
 
-            int x = xCoordinate[fret];
-            if(notePos >= 12)
-            {
-                notePos = 0;
-            }
-
             fretBoardButton[string][fret].setParent(QWidget::parentWidget());
-            fretBoardButton[string][fret].setText(noteList[notePos]);
-            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
+            fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
 
-            fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
+            fretBoardButton[string][fret].setObjectName("tabButton");//set ID Selector for corresponding style sheet
             fretBoardButton[string][fret].setStyleSheet(
-                        "QPushButton#noteButton{background-color: teal;}"
-                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
-                        "QPushButton#noteButton:pressed{background-color: #007A7A};");
+                        "QPushButton#tabButton{background: transparent}"
+                        "QPushButton#tabButton:hover{background-color: rgba(240, 248, 255, 150)}"
+                        "QPushButton#tabButton:pressed{background-color: rgba(230, 230, 250, 150)}");
 
             fretBoardButton[string][fret].show();
-            notePos++;
         }
     }
     fretBoardfilled = true;
@@ -231,34 +221,4 @@ void MusicScales::drawAllNotes()
 void MusicScales::testSlot()//delete
 {
     qDebug() << "CLICKED!";
-}
-
-void MusicScales::buildTabButtons()
-{
-    fretBoardButton = new QPushButton *[6];
-
-    for(int string = 0; string < 6; string++)
-    {
-        int y = yCoordinate[string];
-        fretBoardButton[string] = new QPushButton[13];
-
-        for(int fret = 0; fret < 13; fret++)
-        {
-            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
-
-            int x = xCoordinate[fret];
-
-            fretBoardButton[string][fret].setParent(QWidget::parentWidget());
-
-            fretBoardButton[string][fret].setGeometry(x, y, 38, 30);
-
-            fretBoardButton[string][fret].setObjectName("tabButton");//set ID Selector for corresponding style sheet
-//            fretBoardButton[string][fret].setStyleSheet(
-//                        "QPushButton#noteButton:hover{background-color: rgba(255, 255, 255, 50);"
-//                        "QPushButton#noteButton:hover{border: 2px solid grey;}"
-//                        "QPushButton#noteButton:pressed{background-color: #007A7A};");
-            fretBoardButton[string][fret].show();
-
-        }
-    }
 }
