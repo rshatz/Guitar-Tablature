@@ -19,11 +19,6 @@ public:
 
 private slots:
 
-    void keyChange();
-    void scaleChange();
-    void tuningChange();
-    void drawScale();
-    void drawAllNotes();
     void checkBoxState();
 
 private:
@@ -38,9 +33,9 @@ private:
     QComboBox *tuningComboBox;
 
     QPushButton *submitButton;
+    QPushButton *clearButton;
 
-    QLabel **noteLabels;
-    QLabel *fretBoardLabel;
+    QLabel *fretBoardImage;
     QLabel *keyLabel;
     QLabel *scaleLabel;
     QLabel *tuningLabel;

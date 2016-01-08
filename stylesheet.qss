@@ -18,3 +18,8 @@ QPushButton#noteButton {
     color: white;
     border-radius: 15px;
 }
+QPushButton#tabButton {
+
+    min-width: 50px;
+    border-radius: 15px;
+}

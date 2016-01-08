@@ -1,6 +1,7 @@
 #include <QHBoxLayout>
 #include <QToolBar>
 #include <QFile>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "musicscales.h"
@@ -13,12 +14,12 @@ MainWindow::MainWindow(QWidget *parent)
     musicScale = new MusicScales;
     createToolBar();
 
-    fretBoardLabel = new QLabel;
-    fretBoardLabel->setPixmap(QPixmap(":/fretboard.png"));
+    fretBoardImage = new QLabel;
+    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout->setContentsMargins(60, 20, 50, 20);
-    topLayout->addWidget(fretBoardLabel);
+    topLayout->addWidget(fretBoardImage);
     topLayout->addWidget(musicScale);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -35,6 +36,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::createToolBar()
 {
+    selectionToolBar = addToolBar("Selection Tool Bar");
+    selectionToolBar->setMovable(false);
+
     keyComboBox = new QComboBox;
     keyComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
@@ -93,11 +97,10 @@ void MainWindow::createToolBar()
     tuningLabel->setBuddy(tuningComboBox);
 
     submitButton = new QPushButton("Submit");
+    clearButton = new QPushButton("Clear");
 
-    selectionToolBar = addToolBar("Selection Tool Bar");
-    selectionToolBar->setMovable(false);
+    allNoteCheckBox = new QCheckBox("Show All &Notes");//possibly not needed
 
-    allNoteCheckBox = new QCheckBox("Show All &Notes");
     selectionToolBar->addWidget(keyLabel);
     selectionToolBar->addWidget(keyComboBox);
     selectionToolBar->addSeparator();
@@ -109,43 +112,20 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(submitButton);
     selectionToolBar->addSeparator();
-    selectionToolBar->addWidget(allNoteCheckBox);
+    selectionToolBar->addWidget(clearButton);
 
-    connect(keyComboBox, SIGNAL(activated(int)), this, SLOT(keyChange()));
-    connect(scaleComboBox, SIGNAL(activated(int)), this, SLOT(scaleChange()));
-    connect(tuningComboBox, SIGNAL(activated(int)), this, SLOT(tuningChange()));
-    //connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
-    connect(allNoteCheckBox, SIGNAL(toggled(bool)), this, SLOT(checkBoxState()));
+    connect(keyComboBox, SIGNAL(activated(int)), musicScale, SLOT(setKey(int)));
+    connect(scaleComboBox, SIGNAL(activated(int)), musicScale, SLOT(setScale(int)));
+    connect(tuningComboBox, SIGNAL(activated(int)), musicScale, SLOT(setTuning(int)));
+    connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(clearFretBoard()));
+    connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
+    connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
 
-    keyChange();
-    scaleChange();
-    tuningChange();
-    checkBoxState();
-}
-
-void MainWindow::keyChange()
-{
     musicScale->setKey(keyComboBox->currentIndex());
-}
-
-void MainWindow::scaleChange()
-{
     musicScale->setScale(scaleComboBox->currentIndex());
-}
-
-void MainWindow::tuningChange()
-{
     musicScale->setTuning(tuningComboBox->currentIndex());
-}
 
-void MainWindow::drawScale()
-{
-    musicScale->drawScale();
-}
-
-void MainWindow::drawAllNotes()
-{
-    musicScale->drawAllNotes();
+    //checkBoxState(); maybe delete
 }
 
 void MainWindow::checkBoxState()
@@ -154,8 +134,8 @@ void MainWindow::checkBoxState()
     {
         keyComboBox->setEnabled(false);
         scaleComboBox->setEnabled(false);
-        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
-        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawAllNotes()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
+        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
     }
     else
     {
@@ -163,7 +143,7 @@ void MainWindow::checkBoxState()
         scaleComboBox->setEnabled(true);
         tuningComboBox->setEnabled(true);
         submitButton->setEnabled(true);
-        //connect(allNoteCheckBox, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
-        connect(submitButton, SIGNAL(clicked(bool)), this, SLOT(drawScale()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
+        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
     }
 }

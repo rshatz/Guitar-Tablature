@@ -15,19 +15,20 @@ public:
 
     MusicScales(QWidget *parent = 0);
 
+public slots:
+
     void setKey(int scaleKey);
     void setScale(int scale);
     void setTuning(int tuning);
     void drawScale();
     void drawAllNotes();
+    void clearFretBoard();
 
-private slots:
     void testSlot();//delete
 
 private:
 
     void buildScale();
-    void clearFretBoard();
 
     enum { MAJOR, MAJOR_PENTATONIC, NATURAL_MINOR, MINOR_PENTATONIC,
          HARMONIC_MINOR, MELODIC_MINOR, BLUES, WHOLE_TONE,
@@ -47,6 +48,10 @@ private:
 
     QPushButton **fretBoardButton;
     bool fretBoardfilled;
+
+    const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
+                          733, 825, 915, 1010, 1100};
+    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
 
     int *key;
 };
