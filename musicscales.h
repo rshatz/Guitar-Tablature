@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QLabel>
-
 #include <QPushButton>
 #include <QLineEdit>
 
@@ -24,7 +23,7 @@ public slots:
     void drawAllNotes();
     void clearFretBoard();
 
-    void testSlot();//delete
+    void testSlot(int string, int fret);//delete
 
 private:
 

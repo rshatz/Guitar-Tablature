@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>fretboard.png</file>
         <file>stylesheet.qss</file>
+        <file>fretboard.png</file>
     </qresource>
 </RCC>

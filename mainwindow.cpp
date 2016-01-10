@@ -1,13 +1,11 @@
 #include <QHBoxLayout>
 #include <QToolBar>
-#include <QFile>
 #include <QDebug>
 
 #include "mainwindow.h"
 #include "musicscales.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow()
 {
     this->setWindowTitle("Guitar Scales");
 
@@ -114,18 +112,16 @@ void MainWindow::createToolBar()
     selectionToolBar->addSeparator();
     selectionToolBar->addWidget(clearButton);
 
+    musicScale->setKey(keyComboBox->currentIndex());
+    musicScale->setScale(scaleComboBox->currentIndex());
+    musicScale->setTuning(tuningComboBox->currentIndex());
+
     connect(keyComboBox, SIGNAL(activated(int)), musicScale, SLOT(setKey(int)));
     connect(scaleComboBox, SIGNAL(activated(int)), musicScale, SLOT(setScale(int)));
     connect(tuningComboBox, SIGNAL(activated(int)), musicScale, SLOT(setTuning(int)));
     connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(clearFretBoard()));
     connect(clearButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
     connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
-
-    musicScale->setKey(keyComboBox->currentIndex());
-    musicScale->setScale(scaleComboBox->currentIndex());
-    musicScale->setTuning(tuningComboBox->currentIndex());
-
-    //checkBoxState(); maybe delete
 }
 
 void MainWindow::checkBoxState()

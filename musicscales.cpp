@@ -1,10 +1,10 @@
 #include <QDebug>
+
 #include "musicscales.h"
 
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 {
     fretBoardfilled = false;
-    //drawAllNotes();
 }
 
 void MusicScales::setKey(int scaleKey)
@@ -146,7 +146,9 @@ void MusicScales::drawScale()
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+            connect(&fretBoardButton[string][fret], &QPushButton::clicked, [this, string, fret]() {
+                testSlot(string, fret);
+            });
 
             if(notePos >= 12)
             {
@@ -201,7 +203,9 @@ void MusicScales::drawAllNotes()
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+            connect(&fretBoardButton[string][fret], &QPushButton::clicked, [this, string, fret]() {
+                testSlot(string, fret);
+            });
 
             fretBoardButton[string][fret].setParent(QWidget::parentWidget());
             fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
@@ -218,7 +222,7 @@ void MusicScales::drawAllNotes()
     fretBoardfilled = true;
 }
 
-void MusicScales::testSlot()//delete
+void MusicScales::testSlot(int string, int fret)//delete
 {
-    qDebug() << "CLICKED!";
+    qDebug() << " " << "string" << string + 1 << "fret" << fret;
 }
