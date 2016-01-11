@@ -19,7 +19,12 @@ public:
 
 private slots:
 
-    void checkBoxState();
+    void keyChanged();
+    void scaleChanged();
+    void tuningChanged();
+    void showScale();
+    void tabMode();
+    void checkBoxState();//delete?
 
 private:
 

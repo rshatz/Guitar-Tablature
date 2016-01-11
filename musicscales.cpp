@@ -9,7 +9,45 @@ MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 
 void MusicScales::setKey(int scaleKey)
 {
-    key = new int(scaleKey);
+    switch(scaleKey)
+    {
+    case A:
+        key = new int(scaleKey);
+        break;
+    case A_SHARP:
+        key = new int(scaleKey);
+        break;
+    case B:
+        key = new int(scaleKey);
+        break;
+    case C:
+        key = new int(scaleKey);
+        break;
+    case C_SHARP:
+        key = new int(scaleKey);
+        break;
+    case D:
+        key = new int(scaleKey);
+        break;
+    case D_SHARP:
+        key = new int(scaleKey);
+        break;
+    case E:
+        key = new int(scaleKey);
+        break;
+    case F:
+        key = new int(scaleKey);
+        break;
+    case F_SHARP:
+        key = new int(scaleKey);
+        break;
+    case G:
+        key = new int(scaleKey);
+        break;
+    case G_SHARP:
+        key = new int(scaleKey);
+        break;
+    }
 }
 
 void MusicScales::setScale(int scale)
@@ -113,7 +151,7 @@ void MusicScales::buildScale()
     }
 }
 
-void MusicScales::clearFretBoard()
+void MusicScales::clearFretboard()
 {
     if(fretBoardfilled)
     {
@@ -129,7 +167,7 @@ void MusicScales::clearFretBoard()
 void MusicScales::drawScale()
 {
     scaleDegrees.clear();
-    clearFretBoard();
+    clearFretboard();
 
     buildScale();
 
@@ -190,10 +228,10 @@ void MusicScales::drawScale()
     fretBoardfilled = true;
 }
 
-void MusicScales::drawAllNotes()
+void MusicScales::tabMode()
 {
     scaleDegrees.clear();
-    clearFretBoard();
+    clearFretboard();
 
     fretBoardButton = new QPushButton *[6];
 
