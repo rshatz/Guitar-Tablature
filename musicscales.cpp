@@ -230,6 +230,7 @@ void MusicScales::drawScale()
 
 void MusicScales::tabMode()
 {
+    buildScale();
     scaleDegrees.clear();
     clearFretboard();
 

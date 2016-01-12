@@ -10,7 +10,8 @@ MainWindow::MainWindow()
 {
     setWindowTitle("Guitar Scales");
 
-    musicScale = new MusicScales;
+    musicScale = new MusicScales();
+
     createToolBar();
 
     fretBoardImage = new QLabel;
@@ -26,6 +27,8 @@ MainWindow::MainWindow()
     centralWidget->setStyleSheet("background: black;");
     centralWidget->setLayout(topLayout);
     setCentralWidget(centralWidget);
+
+    tabMode();
 }
 
 MainWindow::~MainWindow()
@@ -54,7 +57,8 @@ void MainWindow::createToolBar()
     keyComboBox->addItem("G", MusicScales::G);
     keyComboBox->addItem("G#", MusicScales::G_SHARP);
 
-    keyLabel = new QLabel("   &Key ");
+    keyLabel = new QLabel("&Key");
+    keyLabel->setContentsMargins(10, 0, 5, 0);
     keyLabel->setBuddy(keyComboBox);
 
     scaleComboBox = new QComboBox;
@@ -76,7 +80,8 @@ void MainWindow::createToolBar()
     scaleComboBox->addItem("aeolian", MusicScales::AEOLIAN);
     scaleComboBox->addItem("locrian", MusicScales::LOCRIAN);
 
-    scaleLabel = new QLabel("   S&cale ");
+    scaleLabel = new QLabel("S&cale ");
+    scaleLabel->setContentsMargins(10, 0, 2, 0);
     scaleLabel->setBuddy(scaleComboBox);
 
     tuningComboBox = new QComboBox;
@@ -92,10 +97,12 @@ void MainWindow::createToolBar()
     tuningComboBox->addItem("Open F", MusicScales::OPEN_F);
     tuningComboBox->addItem("Open G", MusicScales::OPEN_G);
 
-    tuningLabel = new QLabel("   &Tuning ");
+    tuningLabel = new QLabel("&Tuning ");
+    tuningLabel->setContentsMargins(10, 0, 2, 0);
     tuningLabel->setBuddy(tuningComboBox);
 
     submitButton = new QPushButton("Submit");
+
     clearButton = new QPushButton("Clear");
 
     allNoteCheckBox = new QCheckBox("Show All &Notes");//possibly not needed
@@ -136,7 +143,6 @@ void MainWindow::scaleChanged()
     MusicScales::Scale scale = MusicScales::Scale(scaleComboBox->itemData(
                 scaleComboBox->currentIndex(), IdRole).toInt()); //need to study this more
         musicScale->setScale(scale);
-
 }
 
 void MainWindow::tuningChanged()

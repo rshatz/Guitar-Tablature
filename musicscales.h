@@ -29,12 +29,12 @@ public:
     void setTuning(int tuning);
     void drawScale();
     void tabMode();
-    void testSlot(int string, int fret);//delete
 
 private:
 
     void clearFretboard();
     void buildScale();
+    void testSlot(int string, int fret);//delete
 
     const QList<QString> noteList = QList<QString>()
             << "A" << "A#" << "B" << "C" << "C#" << "D"
@@ -44,14 +44,14 @@ private:
     QList<int> scaleFormula;
     QList<int> tuningFormula;
 
+    int *key;
+
     QPushButton **fretBoardButton;
     bool fretBoardfilled;
 
     const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
                           733, 825, 915, 1010, 1100};
     const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
-
-    int *key;
 };
 
 #endif // MUSICSCALES_H
