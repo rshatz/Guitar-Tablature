@@ -1,31 +1,47 @@
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <QToolBar>
 #include <QDebug>
 
 #include "mainwindow.h"
 #include "musicscales.h"
+#include "tabarea.h"
 
 const int IdRole = Qt::UserRole;
 MainWindow::MainWindow()
 {
     setWindowTitle("Guitar Scales");
 
-    musicScale = new MusicScales();
+    musicScale = new MusicScales;
+    tabArea = new TabArea;
 
     createToolBar();
 
     fretBoardImage = new QLabel;
+
     fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(60, 20, 50, 20);
+    topLayout->setContentsMargins(60, 10, 50, 20);
     topLayout->addWidget(fretBoardImage);
     topLayout->addWidget(musicScale);
     topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout->addWidget(tabArea);
+    bottomLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    //topLayout->addLayout(bottomLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(topLayout);
+    mainLayout->addLayout(bottomLayout);
+    //setLayout(mainLayout);
+
     QWidget *centralWidget = new QWidget;
-    centralWidget->setStyleSheet("background: black;");
-    centralWidget->setLayout(topLayout);
+    //centralWidget->setStyleSheet("background: black;");
+    centralWidget->setLayout(mainLayout);
+    //centralWidget->setLayout(bottomLayout);
     setCentralWidget(centralWidget);
 
     tabMode();
@@ -135,21 +151,21 @@ void MainWindow::keyChanged()
 {
     MusicScales::Key key = MusicScales::Key(keyComboBox->itemData(
                 keyComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setKey(key);
+    musicScale->setKey(key);
 }
 
 void MainWindow::scaleChanged()
 {
     MusicScales::Scale scale = MusicScales::Scale(scaleComboBox->itemData(
                 scaleComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setScale(scale);
+    musicScale->setScale(scale);
 }
 
 void MainWindow::tuningChanged()
 {
     MusicScales::Tuning tuning = MusicScales::Tuning(tuningComboBox->itemData(
                 tuningComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setTuning(tuning);
+    musicScale->setTuning(tuning);
 }
 
 void MainWindow::tabMode()

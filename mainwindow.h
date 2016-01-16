@@ -6,8 +6,10 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QCheckBox>
+#include <QPixmap>
 
 #include "musicscales.h"
+#include "tabarea.h"
 
 class MainWindow : public QMainWindow
 {
@@ -47,6 +49,7 @@ private:
     QLabel *tuningLabel;
 
     MusicScales *musicScale;
+    TabArea *tabArea;
 };
 
 #endif // MAINWINDOW_H
