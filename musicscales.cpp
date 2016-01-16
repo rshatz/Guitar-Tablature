@@ -1,10 +1,14 @@
 #include <QDebug>
-
+#include <QPixmap>
 #include "musicscales.h"
 
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 {
     fretBoardfilled = false;
+    fretBoardImage = new QLabel(this);
+
+    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
+    fretBoardImage->show();
 }
 
 void MusicScales::setKey(int scaleKey)
@@ -162,6 +166,8 @@ void MusicScales::clearFretboard()
         delete [] fretBoardButton;
     }
     fretBoardfilled = false;
+
+
 }
 
 void MusicScales::drawScale()
@@ -225,6 +231,7 @@ void MusicScales::drawScale()
             notePos++;
         }
     }
+
     fretBoardfilled = true;
 }
 

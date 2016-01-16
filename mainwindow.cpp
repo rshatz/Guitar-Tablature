@@ -13,21 +13,18 @@ MainWindow::MainWindow()
     setWindowTitle("Guitar Scales");
 
     musicScale = new MusicScales;
-    tabArea = new TabArea;
+    tabArea = new TabArea(this);
 
     createToolBar();
 
-    fretBoardImage = new QLabel;
+    QVBoxLayout *topLayout = new QVBoxLayout;
 
-    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
-
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(60, 10, 50, 20);
-    topLayout->addWidget(fretBoardImage);
     topLayout->addWidget(musicScale);
-    topLayout->setSizeConstraint(QLayout::SetFixedSize);
+    topLayout->setContentsMargins(50, 10, 60, 50);
+    //topLayout->addWidget(tabArea);
+    //topLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    QVBoxLayout *bottomLayout = new QVBoxLayout;
     bottomLayout->addWidget(tabArea);
     bottomLayout->setSizeConstraint(QLayout::SetFixedSize);
 
