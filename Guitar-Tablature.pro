@@ -16,12 +16,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     musicscales.cpp \
-    notebutton.cpp \
     tabarea.cpp
 
 HEADERS  += mainwindow.h \
     musicscales.h \
-    notebutton.h \
     tabarea.h
 
 RESOURCES += \
