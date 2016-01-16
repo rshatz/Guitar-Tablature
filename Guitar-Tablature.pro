@@ -15,10 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    musicscales.cpp
+    musicscales.cpp \
+    notebutton.cpp
 
 HEADERS  += mainwindow.h \
-    musicscales.h
+    musicscales.h \
+    notebutton.h
 
 RESOURCES += \
     guitar-tablature.qrc

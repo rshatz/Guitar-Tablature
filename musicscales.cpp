@@ -1,15 +1,53 @@
 #include <QDebug>
+
 #include "musicscales.h"
 
 MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
 {
     fretBoardfilled = false;
-    //drawAllNotes();
 }
 
 void MusicScales::setKey(int scaleKey)
 {
-    key = new int(scaleKey);
+    switch(scaleKey)
+    {
+    case A:
+        key = new int(scaleKey);
+        break;
+    case A_SHARP:
+        key = new int(scaleKey);
+        break;
+    case B:
+        key = new int(scaleKey);
+        break;
+    case C:
+        key = new int(scaleKey);
+        break;
+    case C_SHARP:
+        key = new int(scaleKey);
+        break;
+    case D:
+        key = new int(scaleKey);
+        break;
+    case D_SHARP:
+        key = new int(scaleKey);
+        break;
+    case E:
+        key = new int(scaleKey);
+        break;
+    case F:
+        key = new int(scaleKey);
+        break;
+    case F_SHARP:
+        key = new int(scaleKey);
+        break;
+    case G:
+        key = new int(scaleKey);
+        break;
+    case G_SHARP:
+        key = new int(scaleKey);
+        break;
+    }
 }
 
 void MusicScales::setScale(int scale)
@@ -113,7 +151,7 @@ void MusicScales::buildScale()
     }
 }
 
-void MusicScales::clearFretBoard()
+void MusicScales::clearFretboard()
 {
     if(fretBoardfilled)
     {
@@ -129,7 +167,7 @@ void MusicScales::clearFretBoard()
 void MusicScales::drawScale()
 {
     scaleDegrees.clear();
-    clearFretBoard();
+    clearFretboard();
 
     buildScale();
 
@@ -146,7 +184,9 @@ void MusicScales::drawScale()
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+            connect(&fretBoardButton[string][fret], &QPushButton::clicked, [this, string, fret]() {
+                testSlot(string, fret);
+            });
 
             if(notePos >= 12)
             {
@@ -188,10 +228,11 @@ void MusicScales::drawScale()
     fretBoardfilled = true;
 }
 
-void MusicScales::drawAllNotes()
+void MusicScales::tabMode()
 {
+    buildScale();
     scaleDegrees.clear();
-    clearFretBoard();
+    clearFretboard();
 
     fretBoardButton = new QPushButton *[6];
 
@@ -201,7 +242,9 @@ void MusicScales::drawAllNotes()
 
         for(int fret = 0; fret < 13; fret++)
         {
-            connect(&fretBoardButton[string][fret], SIGNAL(clicked()), this, SLOT(testSlot()));
+            connect(&fretBoardButton[string][fret], &QPushButton::clicked, [this, string, fret]() {
+                testSlot(string, fret);
+            });
 
             fretBoardButton[string][fret].setParent(QWidget::parentWidget());
             fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
@@ -218,7 +261,7 @@ void MusicScales::drawAllNotes()
     fretBoardfilled = true;
 }
 
-void MusicScales::testSlot()//delete
+void MusicScales::testSlot(int string, int fret)//delete
 {
-    qDebug() << "CLICKED!";
+    qDebug() << " " << "string" << string + 1 << "fret" << fret;
 }

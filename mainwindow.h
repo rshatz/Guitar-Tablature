@@ -14,12 +14,18 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
+
+    MainWindow();
     ~MainWindow();
 
 private slots:
 
-    void checkBoxState();
+    void keyChanged();
+    void scaleChanged();
+    void tuningChanged();
+    void showScale();
+    void tabMode();
+    void checkBoxState();//delete?
 
 private:
 
