@@ -15,12 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    musicscales.cpp \
-    tabarea.cpp
+    tabarea.cpp \
+    fretboard.cpp
 
 HEADERS  += mainwindow.h \
-    musicscales.h \
-    tabarea.h
+    tabarea.h \
+    fretboard.h
 
 RESOURCES += \
     guitar-tablature.qrc

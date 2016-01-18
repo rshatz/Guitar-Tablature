@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPen>
+#include <QLine>
 
 class TabArea : public QWidget
 {
@@ -16,6 +17,8 @@ protected:
 private:
 
     QPen pen;
+
+    QLine *stringLine;
 
 };
 

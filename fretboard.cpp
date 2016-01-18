@@ -1,8 +1,8 @@
 #include <QDebug>
 #include <QPixmap>
-#include "musicscales.h"
+#include "fretboard.h"
 
-MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
+Fretboard::Fretboard(QWidget *parent) : QWidget(parent)
 {
     setTuning(0);
     setKey(0);
@@ -41,7 +41,7 @@ MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
     fretBoardImage->show();
 }
 
-void MusicScales::setKey(int scaleKey)
+void Fretboard::setKey(int scaleKey)
 {
     switch(scaleKey)
     {
@@ -84,7 +84,7 @@ void MusicScales::setKey(int scaleKey)
     }
 }
 
-void MusicScales::setScale(int scale)
+void Fretboard::setScale(int scale)
 {
     scaleFormula.clear();
     switch(scale)
@@ -137,7 +137,7 @@ void MusicScales::setScale(int scale)
     }
 }
 
-void MusicScales::setTuning(int tuning)
+void Fretboard::setTuning(int tuning)
 {
     //tuning formulas created starting on 1st string
     //instead of traditional method of being created
@@ -175,7 +175,7 @@ void MusicScales::setTuning(int tuning)
     }
 }
 
-void MusicScales::buildScale()
+void Fretboard::buildScale()
 {
     int noteIndex = *key;
     for(int i = 0; i < scaleFormula.size(); i++)
@@ -185,7 +185,7 @@ void MusicScales::buildScale()
     }
 }
 
-void MusicScales::clearFretboard()
+void Fretboard::clearFretboard()
 {
     if(fretBoardfilled)
     {
@@ -200,7 +200,7 @@ void MusicScales::clearFretboard()
 
 }
 
-void MusicScales::drawScale()
+void Fretboard::drawScale()
 {
     scaleDegrees.clear();
     clearFretboard();
@@ -257,7 +257,7 @@ void MusicScales::drawScale()
     fretBoardfilled = true;
 }
 
-void MusicScales::tabMode()
+void Fretboard::tabMode()
 {
     buildScale();
     scaleDegrees.clear();
@@ -286,7 +286,7 @@ void MusicScales::tabMode()
     fretBoardfilled = true;
 }
 
-void MusicScales::testSlot(int string, int fret)//delete
+void Fretboard::testSlot(int string, int fret)//delete
 {
     qDebug() << " " << "string" << string + 1 << "fret" << fret;
 }
