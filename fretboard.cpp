@@ -1,13 +1,47 @@
 #include <QDebug>
+#include <QPixmap>
+#include "fretboard.h"
 
-#include "musicscales.h"
-
-MusicScales::MusicScales(QWidget *parent) : QWidget(parent)
+Fretboard::Fretboard(QWidget *parent) : QWidget(parent)
 {
+    setTuning(0);
+    setKey(0);
+    setScale(0);
+
+    buildScale();
+
+    fretBoardButton = new QPushButton *[6];
+
+    for(int string = 0; string < 6; string++)
+    {
+        int notePos = tuningFormula[string];
+
+        fretBoardButton[string] = new QPushButton[13];
+
+        for(int fret = 0; fret < 13; fret++)
+        {
+            if(notePos >= 12)
+            {
+                notePos = 0;
+            }
+
+            fretBoardButton[string][fret].setParent(QWidget::parentWidget());
+            fretBoardButton[string][fret].setText(noteList[notePos]);
+            fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
+
+            notePos++;
+        }
+    }
+
     fretBoardfilled = false;
+
+    fretBoardImage = new QLabel(this);
+
+    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
+    fretBoardImage->show();
 }
 
-void MusicScales::setKey(int scaleKey)
+void Fretboard::setKey(int scaleKey)
 {
     switch(scaleKey)
     {
@@ -50,7 +84,7 @@ void MusicScales::setKey(int scaleKey)
     }
 }
 
-void MusicScales::setScale(int scale)
+void Fretboard::setScale(int scale)
 {
     scaleFormula.clear();
     switch(scale)
@@ -103,7 +137,7 @@ void MusicScales::setScale(int scale)
     }
 }
 
-void MusicScales::setTuning(int tuning)
+void Fretboard::setTuning(int tuning)
 {
     //tuning formulas created starting on 1st string
     //instead of traditional method of being created
@@ -141,7 +175,7 @@ void MusicScales::setTuning(int tuning)
     }
 }
 
-void MusicScales::buildScale()
+void Fretboard::buildScale()
 {
     int noteIndex = *key;
     for(int i = 0; i < scaleFormula.size(); i++)
@@ -151,7 +185,7 @@ void MusicScales::buildScale()
     }
 }
 
-void MusicScales::clearFretboard()
+void Fretboard::clearFretboard()
 {
     if(fretBoardfilled)
     {
@@ -162,9 +196,11 @@ void MusicScales::clearFretboard()
         delete [] fretBoardButton;
     }
     fretBoardfilled = false;
+
+
 }
 
-void MusicScales::drawScale()
+void Fretboard::drawScale()
 {
     scaleDegrees.clear();
     clearFretboard();
@@ -200,18 +236,10 @@ void MusicScales::drawScale()
             if(fretBoardButton[string][fret].text() == noteList[rootNote])
             {
                 fretBoardButton[string][fret].setObjectName("rootButton");//set ID Selector for corresponding style sheet
-                fretBoardButton[string][fret].setStyleSheet(
-                            "QPushButton#rootButton{background-color: rgba(128, 0, 0, 200)}"
-                            "QPushButton#rootButton:hover{border: 2px solid white}"
-                            "QPushButton#rootButton:pressed{background-color: rgb(128, 0, 0)}");
             }
             else
             {
                 fretBoardButton[string][fret].setObjectName("noteButton");//set ID Selector for corresponding style sheet
-                fretBoardButton[string][fret].setStyleSheet(
-                            "QPushButton#noteButton{background-color: rgba(0, 128, 128, 200)}"
-                            "QPushButton#noteButton:hover{border: 2px solid white}"
-                            "QPushButton#noteButton:pressed{background-color: rgb(0, 128, 128)}");
             }
 
             while(i.hasNext())
@@ -225,10 +253,11 @@ void MusicScales::drawScale()
             notePos++;
         }
     }
+
     fretBoardfilled = true;
 }
 
-void MusicScales::tabMode()
+void Fretboard::tabMode()
 {
     buildScale();
     scaleDegrees.clear();
@@ -250,10 +279,6 @@ void MusicScales::tabMode()
             fretBoardButton[string][fret].setGeometry(xCoordinate[fret], yCoordinate[string], 38, 30);
 
             fretBoardButton[string][fret].setObjectName("tabButton");//set ID Selector for corresponding style sheet
-            fretBoardButton[string][fret].setStyleSheet(
-                        "QPushButton#tabButton{background: transparent}"
-                        "QPushButton#tabButton:hover{background-color: rgba(240, 248, 255, 150)}"
-                        "QPushButton#tabButton:pressed{background-color: rgba(230, 230, 250, 150)}");
 
             fretBoardButton[string][fret].show();
         }
@@ -261,7 +286,7 @@ void MusicScales::tabMode()
     fretBoardfilled = true;
 }
 
-void MusicScales::testSlot(int string, int fret)//delete
+void Fretboard::testSlot(int string, int fret)//delete
 {
     qDebug() << " " << "string" << string + 1 << "fret" << fret;
 }

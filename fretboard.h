@@ -1,18 +1,18 @@
-#ifndef MUSICSCALES_H
-#define MUSICSCALES_H
+#ifndef FRETBOARD_H
+#define FRETBOARD_H
 
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
 
-class MusicScales : public QWidget
+class Fretboard : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    MusicScales(QWidget *parent = 0);
+    Fretboard(QWidget *parent = 0);
 
     enum Key { A, A_SHARP, B, C, C_SHARP, D, D_SHARP, E, F, F_SHARP, G, G_SHARP };
 
@@ -46,12 +46,14 @@ private:
 
     int *key;
 
+    QLabel *fretBoardImage;
     QPushButton **fretBoardButton;
+
     bool fretBoardfilled;
 
     const int xCoordinate[13] = {20, 100, 190, 280, 370, 460, 553, 643,
                           733, 825, 915, 1010, 1100};
-    const int yCoordinate[13] = {70, 114, 158, 202, 246, 290};
+    const int yCoordinate[6] = {70, 114, 158, 202, 246, 290};
 };
 
-#endif // MUSICSCALES_H
+#endif // FRETBOARD_H

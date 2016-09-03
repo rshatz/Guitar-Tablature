@@ -1,31 +1,44 @@
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <QToolBar>
 #include <QDebug>
 
 #include "mainwindow.h"
-#include "musicscales.h"
+#include "fretboard.h"
+#include "tabarea.h"
 
 const int IdRole = Qt::UserRole;
 MainWindow::MainWindow()
 {
     setWindowTitle("Guitar Scales");
 
-    musicScale = new MusicScales();
+    fretboard = new Fretboard;
+    tabArea = new TabArea(this);
 
     createToolBar();
 
-    fretBoardImage = new QLabel;
-    fretBoardImage->setPixmap(QPixmap(":/fretboard.png"));
+    QVBoxLayout *topLayout = new QVBoxLayout;
 
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout->setContentsMargins(60, 20, 50, 20);
-    topLayout->addWidget(fretBoardImage);
-    topLayout->addWidget(musicScale);
-    topLayout->setSizeConstraint(QLayout::SetFixedSize);
+    topLayout->addWidget(fretboard);
+    topLayout->setContentsMargins(50, 10, 60, 50);
+    //topLayout->addWidget(tabArea);
+    //topLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    QVBoxLayout *bottomLayout = new QVBoxLayout;
+    bottomLayout->addWidget(tabArea);
+    bottomLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    //topLayout->addLayout(bottomLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(topLayout);
+    mainLayout->addLayout(bottomLayout);
+    //setLayout(mainLayout);
 
     QWidget *centralWidget = new QWidget;
-    centralWidget->setStyleSheet("background: black;");
-    centralWidget->setLayout(topLayout);
+    //centralWidget->setStyleSheet("background: black;");
+    centralWidget->setLayout(mainLayout);
+    //centralWidget->setLayout(bottomLayout);
     setCentralWidget(centralWidget);
 
     tabMode();
@@ -44,18 +57,18 @@ void MainWindow::createToolBar()
     keyComboBox = new QComboBox;
     keyComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-    keyComboBox->addItem("A", MusicScales::A);
-    keyComboBox->addItem("A#", MusicScales::A_SHARP);
-    keyComboBox->addItem("B", MusicScales::B);
-    keyComboBox->addItem("C", MusicScales::C);
-    keyComboBox->addItem("C#", MusicScales::C_SHARP);
-    keyComboBox->addItem("D", MusicScales::D);
-    keyComboBox->addItem("D#", MusicScales::D_SHARP);
-    keyComboBox->addItem("E", MusicScales::E);
-    keyComboBox->addItem("F", MusicScales::F);
-    keyComboBox->addItem("F#", MusicScales::F_SHARP);
-    keyComboBox->addItem("G", MusicScales::G);
-    keyComboBox->addItem("G#", MusicScales::G_SHARP);
+    keyComboBox->addItem("A", Fretboard::A);
+    keyComboBox->addItem("A#", Fretboard::A_SHARP);
+    keyComboBox->addItem("B", Fretboard::B);
+    keyComboBox->addItem("C", Fretboard::C);
+    keyComboBox->addItem("C#", Fretboard::C_SHARP);
+    keyComboBox->addItem("D", Fretboard::D);
+    keyComboBox->addItem("D#", Fretboard::D_SHARP);
+    keyComboBox->addItem("E", Fretboard::E);
+    keyComboBox->addItem("F", Fretboard::F);
+    keyComboBox->addItem("F#", Fretboard::F_SHARP);
+    keyComboBox->addItem("G", Fretboard::G);
+    keyComboBox->addItem("G#", Fretboard::G_SHARP);
 
     keyLabel = new QLabel("&Key");
     keyLabel->setContentsMargins(10, 0, 5, 0);
@@ -64,21 +77,21 @@ void MainWindow::createToolBar()
     scaleComboBox = new QComboBox;
     scaleComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-    scaleComboBox->addItem("major", MusicScales::MAJOR);
-    scaleComboBox->addItem("major pentatonic", MusicScales::MAJOR_PENTATONIC);
-    scaleComboBox->addItem("natural minor", MusicScales::NATURAL_MINOR);
-    scaleComboBox->addItem("minor pentatonic", MusicScales::MINOR_PENTATONIC);
-    scaleComboBox->addItem("harmonic minor", MusicScales::HARMONIC_MINOR);
-    scaleComboBox->addItem("melodic minor", MusicScales::MELODIC_MINOR);
-    scaleComboBox->addItem("blues", MusicScales::BLUES);
-    scaleComboBox->addItem("whole tone", MusicScales::WHOLE_TONE);
-    scaleComboBox->addItem("whole-half diminished", MusicScales::WHOLE_HALF_DIM);
-    scaleComboBox->addItem("half-whole diminished", MusicScales::HALF_WHOLE_DIM);
-    scaleComboBox->addItem("phrygian", MusicScales::PHRYGIAN);
-    scaleComboBox->addItem("lydian", MusicScales::LYDIAN);
-    scaleComboBox->addItem("mixolydian", MusicScales::MIXOLYDIAN);
-    scaleComboBox->addItem("aeolian", MusicScales::AEOLIAN);
-    scaleComboBox->addItem("locrian", MusicScales::LOCRIAN);
+    scaleComboBox->addItem("major", Fretboard::MAJOR);
+    scaleComboBox->addItem("major pentatonic", Fretboard::MAJOR_PENTATONIC);
+    scaleComboBox->addItem("natural minor", Fretboard::NATURAL_MINOR);
+    scaleComboBox->addItem("minor pentatonic", Fretboard::MINOR_PENTATONIC);
+    scaleComboBox->addItem("harmonic minor", Fretboard::HARMONIC_MINOR);
+    scaleComboBox->addItem("melodic minor", Fretboard::MELODIC_MINOR);
+    scaleComboBox->addItem("blues", Fretboard::BLUES);
+    scaleComboBox->addItem("whole tone", Fretboard::WHOLE_TONE);
+    scaleComboBox->addItem("whole-half diminished", Fretboard::WHOLE_HALF_DIM);
+    scaleComboBox->addItem("half-whole diminished", Fretboard::HALF_WHOLE_DIM);
+    scaleComboBox->addItem("phrygian", Fretboard::PHRYGIAN);
+    scaleComboBox->addItem("lydian", Fretboard::LYDIAN);
+    scaleComboBox->addItem("mixolydian", Fretboard::MIXOLYDIAN);
+    scaleComboBox->addItem("aeolian", Fretboard::AEOLIAN);
+    scaleComboBox->addItem("locrian", Fretboard::LOCRIAN);
 
     scaleLabel = new QLabel("S&cale ");
     scaleLabel->setContentsMargins(10, 0, 2, 0);
@@ -87,15 +100,15 @@ void MainWindow::createToolBar()
     tuningComboBox = new QComboBox;
     tuningComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-    tuningComboBox->addItem("Standard", MusicScales::STANDARD);
-    tuningComboBox->addItem("Drop D", MusicScales::DROP_D);
-    tuningComboBox->addItem("Open A", MusicScales::OPEN_A);
-    tuningComboBox->addItem("Open B", MusicScales::OPEN_B);
-    tuningComboBox->addItem("Open C", MusicScales::OPEN_C);
-    tuningComboBox->addItem("Open D", MusicScales::OPEN_D);
-    tuningComboBox->addItem("Open E", MusicScales::OPEN_E);
-    tuningComboBox->addItem("Open F", MusicScales::OPEN_F);
-    tuningComboBox->addItem("Open G", MusicScales::OPEN_G);
+    tuningComboBox->addItem("Standard", Fretboard::STANDARD);
+    tuningComboBox->addItem("Drop D", Fretboard::DROP_D);
+    tuningComboBox->addItem("Open A", Fretboard::OPEN_A);
+    tuningComboBox->addItem("Open B", Fretboard::OPEN_B);
+    tuningComboBox->addItem("Open C", Fretboard::OPEN_C);
+    tuningComboBox->addItem("Open D", Fretboard::OPEN_D);
+    tuningComboBox->addItem("Open E", Fretboard::OPEN_E);
+    tuningComboBox->addItem("Open F", Fretboard::OPEN_F);
+    tuningComboBox->addItem("Open G", Fretboard::OPEN_G);
 
     tuningLabel = new QLabel("&Tuning ");
     tuningLabel->setContentsMargins(10, 0, 2, 0);
@@ -133,33 +146,33 @@ void MainWindow::createToolBar()
 
 void MainWindow::keyChanged()
 {
-    MusicScales::Key key = MusicScales::Key(keyComboBox->itemData(
+    Fretboard::Key key = Fretboard::Key(keyComboBox->itemData(
                 keyComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setKey(key);
+    fretboard->setKey(key);
 }
 
 void MainWindow::scaleChanged()
 {
-    MusicScales::Scale scale = MusicScales::Scale(scaleComboBox->itemData(
+    Fretboard::Scale scale = Fretboard::Scale(scaleComboBox->itemData(
                 scaleComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setScale(scale);
+    fretboard->setScale(scale);
 }
 
 void MainWindow::tuningChanged()
 {
-    MusicScales::Tuning tuning = MusicScales::Tuning(tuningComboBox->itemData(
+    Fretboard::Tuning tuning = Fretboard::Tuning(tuningComboBox->itemData(
                 tuningComboBox->currentIndex(), IdRole).toInt()); //need to study this more
-        musicScale->setTuning(tuning);
+    fretboard->setTuning(tuning);
 }
 
 void MainWindow::tabMode()
 {
-    musicScale->tabMode();
+    fretboard->tabMode();
 }
 
 void MainWindow::showScale()
 {
-    musicScale->drawScale();
+    fretboard->drawScale();
 }
 
 void MainWindow::checkBoxState()
@@ -168,8 +181,8 @@ void MainWindow::checkBoxState()
     {
         keyComboBox->setEnabled(false);
         scaleComboBox->setEnabled(false);
-        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
-        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawAllNotes()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), fretboard, SLOT(drawAllNotes()));
+        connect(submitButton, SIGNAL(clicked(bool)), fretboard, SLOT(drawAllNotes()));
     }
     else
     {
@@ -177,7 +190,7 @@ void MainWindow::checkBoxState()
         scaleComboBox->setEnabled(true);
         tuningComboBox->setEnabled(true);
         submitButton->setEnabled(true);
-        connect(allNoteCheckBox, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
-        connect(submitButton, SIGNAL(clicked(bool)), musicScale, SLOT(drawScale()));
+        connect(allNoteCheckBox, SIGNAL(clicked(bool)), fretboard, SLOT(drawScale()));
+        connect(submitButton, SIGNAL(clicked(bool)), fretboard, SLOT(drawScale()));
     }
 }

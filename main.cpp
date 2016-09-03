@@ -5,20 +5,21 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
+    QApplication app(argc, argv);
 
-    QSize windowSize = w.sizeHint();//this block of code should
-    w.setFixedSize(windowSize);//be deleted to enable mainwindow resize
+    MainWindow window;
+
+    //QSize windowSize = w.sizeHint();//this block of code should
+    //w.setFixedSize(windowSize);//be deleted to enable mainwindow resize
 
     QFile file(":/stylesheet.qss");
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        w.setStyleSheet(file.readAll());
+        window.setStyleSheet(file.readAll());
         file.close();
     }
 
-    w.show();
+    window.show();
 
-    return a.exec();
+    return app.exec();
 }

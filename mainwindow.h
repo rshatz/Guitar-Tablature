@@ -6,8 +6,10 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QCheckBox>
+#include <QPixmap>
 
-#include "musicscales.h"
+#include "fretboard.h"
+#include "tabarea.h"
 
 class MainWindow : public QMainWindow
 {
@@ -46,7 +48,8 @@ private:
     QLabel *scaleLabel;
     QLabel *tuningLabel;
 
-    MusicScales *musicScale;
+    Fretboard *fretboard;
+    TabArea *tabArea;
 };
 
 #endif // MAINWINDOW_H
